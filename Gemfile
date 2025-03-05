@@ -70,3 +70,9 @@ gem "tailwindcss-rails", "~> 3.0"
 gem "shadcn-ui", "~> 0.0.15"
 
 gem "lucide-rails", "~> 0.5.1"
+
+
+# AI
+gem "langchainrb"
+gem "langchainrb_rails"
+gem "qdrant-ruby"
