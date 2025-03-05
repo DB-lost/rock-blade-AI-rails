@@ -1,5 +1,5 @@
 class AssistantsController < ApplicationController
-  before_action :set_assistant, only: [ :update, :destroy, :duplicate, :clear_topics, :set_last_used ]
+  before_action :set_assistant, only: [ :update, :destroy, :set_last_used ]
 
   def create
     @assistant = current_user.assistants.build(assistant_params)
@@ -33,28 +33,6 @@ class AssistantsController < ApplicationController
         format.html { redirect_to ai_chats_path, error: "助手删除失败" }
         format.json { render json: { error: "删除失败" }, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # 复制助手
-  def duplicate
-    new_assistant = @assistant.dup
-    new_assistant.title = "#{@assistant.title} 副本"
-    new_assistant.user = current_user
-
-    if new_assistant.save
-      render json: { success: true }, status: :ok
-    else
-      render json: { error: new_assistant.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  # 清空所有话题
-  def clear_topics
-    if @assistant.conversations.destroy_all
-      render json: { success: true }, status: :ok
-    else
-      render json: { error: "清空话题失败" }, status: :unprocessable_entity
     end
   end
 

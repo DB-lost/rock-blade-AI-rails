@@ -1,0 +1,43 @@
+<!-- 助手列表区域 -->
+<div class="flex-1 p-4 space-y-2 overflow-y-auto">
+    <% @assistants.each do |assistant| %>
+    <div class="p-2 hover:bg-muted rounded cursor-pointer flex items-center space-x-2 relative group border-2 border-transparent"
+            data-controller="assistant-menu"
+            data-action="contextmenu->assistant-menu#showMenu"
+            data-assistant-menu-id-value="<%= assistant.id %>"
+            data-assistant-menu-active-value="false">
+        <div class="flex items-center space-x-2 w-full cursor-pointer" data-action="click->assistant-menu#selectAssistant">
+        <% icon_name = case assistant.title 
+                        when /论文|Essay/i then "pen-tool"
+                        when /编程|Coding/i then "code"
+                        when /Linux|终端|Terminal/i then "terminal"
+                        else "bot"
+                        end %>
+        <%= lucide_icon icon_name, class: "w-5 h-5" %>
+        <h3 class="font-semibold truncate"><%= assistant.title %></h3>
+        </div>
+        
+        <!-- 右键菜单 -->
+        <div class="hidden absolute right-0 top-0 mt-8 bg-background border border-border rounded-md shadow-md z-10 w-40 py-1"
+            data-assistant-menu-target="menu"
+            data-action="click->assistant-menu#preventBubble">
+        <%= render_dialog do %>
+            <%= dialog_trigger do %>
+            <button class="w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2">
+                <%= lucide_icon "edit-3", class: "w-4 h-4" %>
+                <span>编辑助手</span>
+            </button>
+            <% end %>
+            <%= dialog_content do %>
+            <%= render "ai_chats/assistants/form", assistant: assistant %>
+            <% end %>
+        <% end %>
+        <hr class="my-1 border-border">
+        <%= button_to assistant_path(assistant), method: :delete, class:"w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2 text-destructive" do %>
+            <%= lucide_icon "trash", class: "w-4 h-4" %>
+            <span>删除助手</span>
+        <% end %>
+        </div>
+    </div>
+    <% end %>
+</div>

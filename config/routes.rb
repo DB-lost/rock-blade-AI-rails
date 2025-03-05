@@ -30,10 +30,8 @@ Rails.application.routes.draw do
   get "ai_chats" => "ai_chats#index"
 
   # 助手相关路由
-  resources :assistants do
+  resources :assistants, only: [ :create, :update, :destroy ] do
     member do
-      post :duplicate    # 复制助手
-      delete :clear_topics  # 清空所有话题
       post :set_last_used  # 设置最后使用的助手
     end
 
