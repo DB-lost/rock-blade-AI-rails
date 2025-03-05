@@ -72,70 +72,15 @@
     <% end %>
   <% end %>
 
-  <%# Platform 部分 %>
-  <div class="p-2">
-    <div class="text-sm font-medium text-muted-foreground px-2 py-1.5">Platform</div>
-    
-    <%= render_accordion title: "Playground" do %>
-      <%= link_to "History", "#", class: "block px-2 py-1.5 text-sm hover:bg-accent rounded-md" %>
-      <%= link_to "Starred", "#", class: "block px-2 py-1.5 text-sm hover:bg-accent rounded-md" %>
-      <%= link_to "Settings", "#", class: "block px-2 py-1.5 text-sm hover:bg-accent rounded-md" %>
-    <% end %>
-
-    <%= link_to "#", class: "flex items-center justify-between px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
-      <div class="flex items-center">
-        <span class="mr-2">📚</span>
-        <span>Models</span>
-      </div>
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M9 18l6-6-6-6"/>
-      </svg>
-    <% end %>
-
-    <%= link_to "#", class: "flex items-center justify-between px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
-      <div class="flex items-center">
-        <span class="mr-2">📖</span>
-        <span>Documentation</span>
-      </div>
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M9 18l6-6-6-6"/>
-      </svg>
-    <% end %>
-
-    <%= link_to "#", class: "flex items-center justify-between px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
-      <div class="flex items-center">
-        <span class="mr-2">⚙️</span>
-        <span>Settings</span>
-      </div>
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M9 18l6-6-6-6"/>
-      </svg>
-    <% end %>
-  </div>
-
   <%# Projects 部分 %>
   <div class="p-2">
     <div class="text-sm font-medium text-muted-foreground px-2 py-1.5">Projects</div>
     
     <%= link_to "#", class: "flex items-center px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
-      <span class="mr-2">#</span>
-      <span>Design Engineering</span>
+      <span class="mr-2">🤖</span>
+      <span>AI Chat</span>
     <% end %>
 
-    <%= link_to "#", class: "flex items-center px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
-      <span class="mr-2">📊</span>
-      <span>Sales & Marketing</span>
-    <% end %>
-
-    <%= link_to "#", class: "flex items-center px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
-      <span class="mr-2">✈️</span>
-      <span>Travel</span>
-    <% end %>
-
-    <%= link_to "#", class: "flex items-center px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
-      <span class="mr-2">...</span>
-      <span>More</span>
-    <% end %>
   </div>
 
   <%# 用户信息 %>
