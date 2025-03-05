@@ -12,11 +12,14 @@
 
 ActiveRecord::Schema[8.0].define(version: 2025_03_05_095022) do
   create_table "assistants", force: :cascade do |t|
+    t.string "title", null: false
     t.string "instructions"
     t.string "tool_choice"
     t.json "tools"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_assistants_on_user_id"
   end
 
   create_table "conversations", force: :cascade do |t|
@@ -71,6 +74,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_05_095022) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "assistants", "users"
   add_foreign_key "conversations", "assistants"
   add_foreign_key "conversations", "users"
   add_foreign_key "messages", "assistants"

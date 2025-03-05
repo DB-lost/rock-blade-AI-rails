@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Assistant < ActiveRecord::Base
+  belongs_to :user
   has_many :messages
   has_many :conversations, dependent: :destroy
 
