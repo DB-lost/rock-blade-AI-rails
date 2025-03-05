@@ -1,5 +1,6 @@
 @import "shadcn.css";
 @import "flash.css";
+@import "textarea.css";
 
 @tailwind base;
 @tailwind components;
