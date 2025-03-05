@@ -7,40 +7,14 @@
   <div class="flex-1 flex flex-col">
     <!-- 对话展示区域 - 只有这里可以滚动 -->
     <div class="flex-1 overflow-y-auto">
-      <div class="p-6 space-y-6">
-        <!-- AI消息 -->
-        <div class="flex items-start space-x-4">
-          <%= lucide_icon "bot", class: "w-6 h-6 mt-1 flex-shrink-0 text-muted-foreground" %>
-          <div class="flex-1 bg-muted rounded-lg p-4">
-            <h2 class="text-xl font-semibold mb-2">研究背景部分</h2>
-            <ul class="list-disc ml-6 mt-2 space-y-2 text-muted-foreground">
-              <li>强化对电子商务市场的描述，聚焦重要电商的现状和挑战。</li>
-              <li>补充2023年重直电商市场的具体数据，如市场规模、用户增长率等。</li>
-            </ul>
+      <div id="conversation_messages" class="p-6 space-y-6">
+        <% if @current_conversation&.messages&.any? %>
+          <%= render partial: "messages/#{message.role}_message", collection: @current_conversation.messages.ordered, as: :message %>
+        <% else %>
+          <div class="text-center text-muted-foreground p-4">
+            开始新的对话...
           </div>
-        </div>
-        
-        <!-- 用户消息 -->
-        <div class="flex items-start space-x-4 justify-end">
-          <div class="flex-1 bg-primary rounded-lg p-4">
-            <div class="text-primary-foreground">
-              <p>好的，我会按照建议补充相关内容。</p>
-            </div>
-          </div>
-          <%= lucide_icon "user", class: "w-6 h-6 mt-1 flex-shrink-0 text-muted-foreground" %>
-        </div>
-
-        <!-- AI消息 -->
-        <div class="flex items-start space-x-4">
-          <%= lucide_icon "bot", class: "w-6 h-6 mt-1 flex-shrink-0 text-muted-foreground" %>
-          <div class="flex-1 bg-muted rounded-lg p-4">
-            <h2 class="text-xl font-semibold mb-2">文献综述部分</h2>
-            <ul class="list-disc ml-6 mt-2 space-y-2 text-muted-foreground">
-              <li>增加对SWOT和4P理论在电商领域应用的文献回顾，明确理论框架的合理性。</li>
-              <li>补充最新研究成果，特别是关于重直电商模式的创新和挑战。</li>
-            </ul>
-          </div>
-        </div>
+        <% end %>
       </div>
     </div>
 

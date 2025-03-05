@@ -1,1 +1,8 @@
-<!-- 系统消息通常不显示给用户 --> 
+<div class="flex items-start space-x-4">
+  <%= lucide_icon "bot", class: "w-6 h-6 mt-1 flex-shrink-0 text-muted-foreground" %>
+  <div class="flex-1 bg-muted rounded-lg p-4">
+    <div class="text-muted-foreground">
+      <%= message.content %>
+    </div>
+  </div>
+</div>

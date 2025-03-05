@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 class Message < ActiveRecord::Base
-  belongs_to :assistant
   belongs_to :conversation
 
   validates :content, presence: true
-  validates :role, presence: true
+  validates :role, presence: true, inclusion: { in: %w[system assistant user] }
+
+  scope :ordered, -> { order(created_at: :asc) }
+  delegate :assistant, to: :conversation
 
   after_create_commit -> { broadcast_create }
 
