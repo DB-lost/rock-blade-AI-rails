@@ -1,0 +1,13 @@
+<%= render_form_for(Assistant.new, class: "w-full") do |form| %>
+  <div class="grid grid-cols-3 items-baseline mb-4">
+    <%= form.label :title, class: "text-right mr-4 text-lg" %>
+    <%= form.text_field :title, required: true, class: "col-span-2" %>
+  </div>
+  <div class="grid grid-cols-3 items-baseline">
+    <%= form.label :instructions, class: "text-right mr-4 text-lg" %>
+    <%= form.text_area :instructions, required: true, class: "col-span-2 mb-8" %>
+  </div>
+  <div class="flex justify-center">
+    <%= form.submit "Create Assistant" %>
+  </div>
+<% end %>

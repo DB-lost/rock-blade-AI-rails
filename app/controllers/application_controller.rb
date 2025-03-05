@@ -10,4 +10,10 @@ class ApplicationController < ActionController::Base
   def set_default_breadcrumb
     add_breadcrumb "Home", root_path
   end
+
+  def current_user
+    Current.session&.user
+  end
+
+  helper_method :current_user
 end

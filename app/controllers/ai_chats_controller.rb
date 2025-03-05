@@ -2,6 +2,7 @@ class AiChatsController < ApplicationController
   before_action :set_chat_breadcrumbs
 
   def index
+    @assistants = current_user.assistants
   end
 
   private

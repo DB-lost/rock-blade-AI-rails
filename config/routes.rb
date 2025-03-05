@@ -29,12 +29,13 @@ Rails.application.routes.draw do
 
   get "ai_chats" => "ai_chats#index"
 
-  # AI助手和对话
-  resources :assistants, only: [ :index, :show ] do
-    resources :conversations, only: [ :create, :show, :index ]
-  end
+  # 助手相关路由
+  resources :assistants do
+    member do
+      post :duplicate    # 复制助手
+      delete :clear_topics  # 清空所有话题
+    end
 
-  resources :conversations, only: [] do
-    resources :messages, only: [ :create ]
+    resources :conversations, only: [ :create, :show, :destroy ]
   end
 end
