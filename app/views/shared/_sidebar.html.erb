@@ -1,0 +1,229 @@
+<%# 侧边栏容器 %>
+<div class="flex flex-col h-screen w-64 bg-white dark:bg-gray-800 border-r border-border">
+  <%# 企业信息 %>
+  <%= render_dropdown_menu do %>
+    <%= dropdown_menu_trigger do %>
+      <div class="p-4 flex items-center space-x-3 hover:bg-accent cursor-pointer rounded-lg">
+        <div class="w-8 h-8 bg-foreground rounded-lg flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-background" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-semibold">Acme Inc</div>
+          <div class="text-sm text-muted-foreground">Enterprise</div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </div>
+    <% end %>
+
+    <%= dropdown_menu_content do %>
+      <%= dropdown_menu_label "Teams" %>
+      
+      <%= dropdown_menu_item do %>
+        <div class="flex items-center space-x-3">
+          <div class="w-6 h-6 bg-foreground rounded-lg flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-background" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+            </svg>
+          </div>
+          <span>Acme Inc</span>
+        </div>
+        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘1</span>
+      <% end %>
+
+      <%= dropdown_menu_item do %>
+        <div class="flex items-center space-x-3">
+          <div class="w-6 h-6 bg-primary/10 rounded-lg flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <span>Acme Corp.</span>
+        </div>
+        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘2</span>
+      <% end %>
+
+      <%= dropdown_menu_item do %>
+        <div class="flex items-center space-x-3">
+          <div class="w-6 h-6 bg-destructive/10 rounded-lg flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-destructive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
+            </svg>
+          </div>
+          <span>Evil Corp.</span>
+        </div>
+        <span class="ml-auto text-xs tracking-widest text-muted-foreground">⌘3</span>
+      <% end %>
+
+      <%= render_separator class: "my-2" %>
+
+      <%= dropdown_menu_item do %>
+        <div class="flex items-center space-x-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14m-7-7h14"/>
+          </svg>
+          <span>Add team</span>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%# Platform 部分 %>
+  <div class="p-2">
+    <div class="text-sm font-medium text-muted-foreground px-2 py-1.5">Platform</div>
+    
+    <%= render_accordion title: "Playground" do %>
+      <%= link_to "History", "#", class: "block px-2 py-1.5 text-sm hover:bg-accent rounded-md" %>
+      <%= link_to "Starred", "#", class: "block px-2 py-1.5 text-sm hover:bg-accent rounded-md" %>
+      <%= link_to "Settings", "#", class: "block px-2 py-1.5 text-sm hover:bg-accent rounded-md" %>
+    <% end %>
+
+    <%= link_to "#", class: "flex items-center justify-between px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
+      <div class="flex items-center">
+        <span class="mr-2">📚</span>
+        <span>Models</span>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    <% end %>
+
+    <%= link_to "#", class: "flex items-center justify-between px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
+      <div class="flex items-center">
+        <span class="mr-2">📖</span>
+        <span>Documentation</span>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    <% end %>
+
+    <%= link_to "#", class: "flex items-center justify-between px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
+      <div class="flex items-center">
+        <span class="mr-2">⚙️</span>
+        <span>Settings</span>
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    <% end %>
+  </div>
+
+  <%# Projects 部分 %>
+  <div class="p-2">
+    <div class="text-sm font-medium text-muted-foreground px-2 py-1.5">Projects</div>
+    
+    <%= link_to "#", class: "flex items-center px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
+      <span class="mr-2">#</span>
+      <span>Design Engineering</span>
+    <% end %>
+
+    <%= link_to "#", class: "flex items-center px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
+      <span class="mr-2">📊</span>
+      <span>Sales & Marketing</span>
+    <% end %>
+
+    <%= link_to "#", class: "flex items-center px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
+      <span class="mr-2">✈️</span>
+      <span>Travel</span>
+    <% end %>
+
+    <%= link_to "#", class: "flex items-center px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
+      <span class="mr-2">...</span>
+      <span>More</span>
+    <% end %>
+  </div>
+
+  <%# 用户信息 %>
+  <div class="mt-auto p-4 border-t border-border">
+    <%= render_dropdown_menu do %>
+      <%= dropdown_menu_trigger do %>
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=shadcn" alt="User avatar" class="w-full h-full object-cover" />
+          </div>
+          <div>
+            <div class="text-sm font-medium">shadcn</div>
+            <div class="text-xs text-muted-foreground">m@example.com</div>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+      <% end %>
+
+      <%= dropdown_menu_content do %>
+        <div class="p-2">
+          <div class="flex items-center space-x-3 px-2 py-1.5">
+            <div class="w-8 h-8 rounded-full overflow-hidden">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=shadcn" alt="User avatar" class="w-full h-full object-cover" />
+            </div>
+            <div>
+              <div class="text-sm font-medium">shadcn</div>
+              <div class="text-xs text-muted-foreground">m@example.com</div>
+            </div>
+          </div>
+        </div>
+
+        <%= render_separator %>
+
+        <%= dropdown_menu_item do %>
+          <div class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <span>Upgrade to Pro</span>
+          </div>
+        <% end %>
+
+        <%= dropdown_menu_item do %>
+          <div class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Account</span>
+          </div>
+        <% end %>
+
+        <%= dropdown_menu_item do %>
+          <div class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>Billing</span>
+          </div>
+        <% end %>
+
+        <%= dropdown_menu_item do %>
+          <div class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span>Notifications</span>
+          </div>
+        <% end %>
+
+        <%= render_separator %>
+
+        <%= button_to session_path, method: :delete, class: "w-full" do %>
+          <%= dropdown_menu_item do %>
+            <div class="flex items-center space-x-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              <span>Log out</span>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

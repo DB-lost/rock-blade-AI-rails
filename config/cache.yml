@@ -1,0 +1,23 @@
+default: &default
+  store_options: &default_store_options
+    max_age: <%= 60.days.to_i %>
+    namespace: <%= Rails.env %>
+  size_estimate_samples: 1000
+
+development: &development
+  database: cache
+  store_options:
+    <<: *default_store_options
+    max_size: <%= 256.gigabytes %>
+
+test: &test
+  database: cache
+  store_options:
+    <<: *default_store_options
+    max_size: <%= 256.gigabytes %>
+
+production: &production
+  databases: [production_cache1, production_cache2]
+  store_options:
+    <<: *default_store_options
+    max_entries: <%= 256.gigabytes %>

@@ -1,0 +1,30 @@
+<div class="flex flex-col gap-6 mt-8 mb-8 px-8">
+  <% steps = [
+    { number: "1", title: "Verify Phone" },
+    { number: "2", title: "Account Info" }
+  ] %>
+  
+  <div class="flex items-center justify-between">
+    <% steps.each_with_index do |step, index| %>
+      <%= link_to change_step_registration_path(step: index), 
+          data: { turbo_method: :post },
+          class: ["flex flex-col items-center min-w-16",
+                 ("cursor-not-allowed opacity-60" if index > current_step + 1),
+                 ("hover:opacity-80" if index <= current_step + 1)
+          ].compact.join(" ") do %>
+        <div class="text-2xl font-medium <%= current_step == index ? 'text-primary' : 'text-muted-foreground' %>">
+          <%= step[:number] %>
+        </div>
+        <div class="mt-2 text-sm text-center <%= current_step == index ? 'text-primary' : 'text-muted-foreground' %>">
+          <%= step[:title] %>
+        </div>
+      <% end %>
+
+      <% if index < steps.length - 1 %>
+        <div class="flex-1 h-[1px] bg-border self-start mt-4 mx-2">
+          <div class="h-full bg-primary transition-all duration-300" style="width: <%= current_step > index ? '100%' : '0%' %>"></div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

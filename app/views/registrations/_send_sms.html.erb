@@ -1,0 +1,42 @@
+<%= render_form_with model: user, url: registration_path, class: "flex flex-col gap-6" do |form| %>
+  <div class="grid gap-6">
+    <div class="grid gap-2">
+      <%= form.label :phone, label: "Phone number" %>
+      <div class="flex items-center gap-3" data-controller="registration">
+        <%= form.text_field :phone, 
+            type: :tel, 
+            placeholder: "Please enter your phone number",
+            required: true,
+            class: "flex-1",
+            data: { registration_target: "phone" } %>
+        <%= render_button "Send Code", 
+            as: :button,
+            class: "whitespace-nowrap",
+            data: { 
+              registration_target: "sendButton",
+              action: "click->registration#sendCode"
+            } %>
+      </div>
+    </div>
+
+    <div class="grid gap-2">
+      <%= form.label :verification_code, label: "Verification code" %>
+      <%= form.text_field :verification_code, 
+          type: :text, 
+          placeholder: "Please enter the verification code",
+          required: true %>
+    </div>
+
+    <div class="flex justify-center">
+      <%= form.submit "Next", class: "w-full" %>
+    </div>
+  </div>
+
+  <div class="text-center text-sm">
+    Already have an account?
+    <%= link_to "Sign in", 
+        new_session_path,
+        data: { turbo: false },
+        class: "underline underline-offset-4" %>
+  </div>
+<% end %>

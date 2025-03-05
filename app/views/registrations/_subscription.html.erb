@@ -1,0 +1,118 @@
+<div data-controller="pricing">
+  <div class="flex flex-col items-center gap-6">
+    <div class="flex items-center gap-3 text-lg">
+      <span>Monthly</span>
+      <%= check_box_tag :yearly_pricing, "1", false, 
+          data: { 
+            pricing_target: "switch",
+            action: "change->pricing#togglePricing"
+          },
+          class: "hidden peer" 
+      %>
+      <label for="yearly_pricing" class="relative inline-flex h-6 w-11 cursor-pointer items-center">
+        <div data-pricing-target="switchTrack" 
+             class="absolute inset-0 rounded-full bg-gray-200 transition-colors duration-300 ease-in-out">
+        </div>
+        <div data-pricing-target="switchThumb" 
+             class="absolute left-[2px] top-[2px] h-5 w-5 transform rounded-full bg-white transition-transform duration-300 ease-in-out">
+        </div>
+      </label>
+      <span>Yearly</span>
+    </div>
+    
+    <div class="flex flex-col items-stretch gap-6 md:flex-row">
+      <% plans ||= [
+        {
+          id: "plus",
+          name: "Plus",
+          description: "For personal use",
+          monthly_price: "$19",
+          yearly_price: "$15",
+          features: [
+            { text: "Up to 5 team members" },
+            { text: "Basic components library" },
+            { text: "Community support" },
+            { text: "1GB storage space" }
+          ],
+          button: {
+            text: "Purchase",
+            url: "#"
+          }
+        },
+        {
+          id: "pro",
+          name: "Pro",
+          description: "For professionals",
+          monthly_price: "$49",
+          yearly_price: "$35",
+          features: [
+            { text: "Unlimited team members" },
+            { text: "Advanced components" },
+            { text: "Priority support" },
+            { text: "Unlimited storage" }
+          ],
+          button: {
+            text: "Purchase",
+            url: "#"
+          }
+        }
+      ] %>
+      
+      <% plans.each do |plan| %>
+        <%= render_card(
+          title: plan[:name],
+          subtitle: plan[:description],
+          class: "flex w-80 flex-col justify-between text-left"
+        ) do %>
+          <div class="mb-4">
+            <span class="text-4xl font-bold" data-pricing-target="price" data-monthly="<%= plan[:monthly_price] %>" data-yearly="<%= plan[:yearly_price] %>">
+              <%= plan[:monthly_price] %>
+            </span>
+            <p class="text-muted-foreground">
+              Annual billing
+              <span data-pricing-target="billingText" 
+                    data-monthly="$<%= plan[:monthly_price].delete('$').to_i * 12 %>" 
+                    data-yearly="$<%= plan[:yearly_price].delete('$').to_i * 12 %>">
+                $<%= plan[:monthly_price].delete('$').to_i * 12 %>
+              </span>
+            </p>
+          </div>
+          
+          <%= render_separator(class: "mb-6") %>
+          
+          <% if plan[:id] == "pro" %>
+            <p class="mb-3 font-semibold">
+              Everything in Plus, and:
+            </p>
+          <% end %>
+          
+          <ul class="space-y-4 mb-6">
+            <% plan[:features].each do |feature| %>
+              <li class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="m9 12 2 2 4-4"></path>
+                </svg>
+                <span><%= feature[:text] %></span>
+              </li>
+            <% end %>
+          </ul>
+          
+          <div class="mt-auto">
+            <%= render_button text: plan[:button][:text], 
+                as: :link,
+                href: plan[:button][:url],
+                class: "w-full" do %>
+              <%= plan[:button][:text] %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 size-4">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  
+</div>

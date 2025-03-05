@@ -1,0 +1,28 @@
+<div class="p-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        欢迎使用 Rails 8 + TailwindCSS 4
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
+        这是一个使用最新版本TailwindCSS的示例页面
+      </p>
+      <div class="space-y-4">
+        <%= render_button "Button" %>
+        <%= render_button text: "Destructive", variant: :destructive %>
+        <%= render_button "Link", as: :link, href: "/" %>
+
+        <div class="flex space-x-4">
+          <div class="flex-1 bg-green-100 dark:bg-green-900 p-4 rounded-lg">
+            <h3 class="text-green-800 dark:text-green-200 font-semibold">卡片 1</h3>
+            <p class="text-green-600 dark:text-green-300">使用Tailwind实现的卡片样式</p>
+          </div>
+          <div class="flex-1 bg-purple-100 dark:bg-purple-900 p-4 rounded-lg">
+            <h3 class="text-purple-800 dark:text-purple-200 font-semibold">卡片 2</h3>
+            <p class="text-purple-600 dark:text-purple-300">展示响应式设计效果</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

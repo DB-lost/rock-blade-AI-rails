@@ -1,0 +1,46 @@
+<%= render_form_with model: user, url: registration_path, class: "flex flex-col gap-6" do |form| %>
+  <%= turbo_frame_tag "error_messages" do %>
+    <%= render "shared/error_messages", errors: user.errors if user.errors.any? %>
+  <% end %>
+  <div class="grid gap-6">
+    <div class="grid gap-2">
+      <%= form.label :email_address, label: "Email" %>
+      <%= form.text_field :email_address, type: :email, 
+          placeholder: "m@example.com",
+          required: true %>
+    </div>
+
+    <div class="grid gap-2">
+      <%= form.label :username, label: "Username" %>
+      <%= form.text_field :username, 
+          placeholder: "Please enter your username",
+          required: true %>
+    </div>
+
+    <div class="grid gap-2">
+      <%= form.label :password, label: "Password" %>
+      <%= form.text_field :password, type: :password, 
+          placeholder: "Please enter your password",
+          required: true %>
+    </div>
+
+    <div class="grid gap-2">
+      <%= form.label :password_confirmation, label: "Password confirmation" %>
+      <%= form.text_field :password_confirmation, type: :password, 
+          placeholder: "Please enter your password again",
+          required: true %>
+    </div>
+
+    <div class="flex justify-center">
+      <%= form.submit "Create Account", class: "w-full" %>
+    </div>
+  </div>
+
+  <div class="text-center text-sm">
+    Already have an account?
+    <%= link_to "Sign in", 
+        new_session_path,
+        data: { turbo: false },
+        class: "underline underline-offset-4" %>
+  </div>
+<% end %>
