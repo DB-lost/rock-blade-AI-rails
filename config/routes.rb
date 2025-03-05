@@ -28,4 +28,13 @@ Rails.application.routes.draw do
   get "sign_up" => "registrations#new", as: :sign_up
 
   get "ai_chats" => "ai_chats#index"
+
+  # AI助手和对话
+  resources :assistants, only: [ :index, :show ] do
+    resources :conversations, only: [ :create, :show, :index ]
+  end
+
+  resources :conversations, only: [] do
+    resources :messages, only: [ :create ]
+  end
 end
