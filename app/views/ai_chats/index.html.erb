@@ -1,4 +1,62 @@
-<div>
-  <h1 class="font-bold text-4xl">AiChats#index</h1>
-  <p>Find me in app/views/ai_chats/index.html.erb</p>
+<div class="flex h-screen bg-gray-900 text-white">
+  <!-- 主要内容区域 -->
+  <div class="flex-1 flex flex-col">
+    <!-- 编辑器区域 -->
+    <div class="flex-1 p-6">
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold">研究背景部分</h2>
+        <ul class="list-disc ml-6 mt-2 space-y-2">
+          <li>强化对电子商务市场的描述，聚焦重要电商的现状和挑战。</li>
+          <li>补充2023年重直电商市场的具体数据，如市场规模、用户增长率等。</li>
+        </ul>
+      </div>
+      
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold">文献综述部分</h2>
+        <ul class="list-disc ml-6 mt-2 space-y-2">
+          <li>增加对SWOT和4P理论在电商领域应用的文献回顾，明确理论框架的合理性。</li>
+          <li>补充最新研究成果，特别是关于重直电商模式的创新和挑战。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 底部编辑工具栏 -->
+    <div class="border-t border-gray-700 p-4">
+      <div class="flex items-center space-x-4">
+        <button class="p-2 hover:bg-gray-700 rounded">
+          <%= lucide_icon "bold", class: "w-5 h-5" %>
+        </button>
+        <button class="p-2 hover:bg-gray-700 rounded">
+          <%= lucide_icon "italic", class: "w-5 h-5" %>
+        </button>
+        <button class="p-2 hover:bg-gray-700 rounded">
+          <%= lucide_icon "list", class: "w-5 h-5" %>
+        </button>
+        <button class="p-2 hover:bg-gray-700 rounded">
+          <%= lucide_icon "heading", class: "w-5 h-5" %>
+        </button>
+        <button class="p-2 hover:bg-gray-700 rounded">
+          <%= lucide_icon "link", class: "w-5 h-5" %>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右侧边栏 -->
+  <div class="w-64 bg-gray-800 p-4 border-l border-gray-700">
+    <div class="space-y-4">
+      <div class="p-2 hover:bg-gray-700 rounded cursor-pointer flex items-center space-x-2">
+        <%= lucide_icon "pen-tool", class: "w-5 h-5" %>
+        <h3 class="font-semibold">论文写手 - Essay Writer</h3>
+      </div>
+      <div class="p-2 hover:bg-gray-700 rounded cursor-pointer flex items-center space-x-2">
+        <%= lucide_icon "code", class: "w-5 h-5" %>
+        <h3 class="font-semibold">编程辅助 CAN - Coding Assistance</h3>
+      </div>
+      <div class="p-2 hover:bg-gray-700 rounded cursor-pointer flex items-center space-x-2">
+        <%= lucide_icon "terminal", class: "w-5 h-5" %>
+        <h3 class="font-semibold">Linux 终端 - Linux Terminal</h3>
+      </div>
+    </div>
+  </div>
 </div>

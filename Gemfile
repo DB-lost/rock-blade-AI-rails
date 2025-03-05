@@ -68,3 +68,5 @@ gem "tailwindcss-rails", "~> 3.0"
 
 # Shadcn UI is a UI component library for Rails [
 gem "shadcn-ui", "~> 0.0.15"
+
+gem "lucide-rails", "~> 0.5.1"
