@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full" data-theme="dark">
   <head>
     <title><%= content_for(:title) || "Rock Blade Rails" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -23,7 +23,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-background text-foreground">
+  <body class="h-full bg-background text-foreground antialiased">
     <%= render "shared/flash_messages" %>
     
     <div class="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900" data-controller="sidebar">

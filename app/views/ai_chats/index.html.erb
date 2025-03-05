@@ -1,59 +1,98 @@
-<div class="flex h-screen bg-gray-900 text-white">
+<div class="h-full flex bg-background">
   <!-- 主要内容区域 -->
   <div class="flex-1 flex flex-col">
-    <!-- 编辑器区域 -->
-    <div class="flex-1 p-6">
-      <div class="mb-4">
-        <h2 class="text-xl font-semibold">研究背景部分</h2>
-        <ul class="list-disc ml-6 mt-2 space-y-2">
-          <li>强化对电子商务市场的描述，聚焦重要电商的现状和挑战。</li>
-          <li>补充2023年重直电商市场的具体数据，如市场规模、用户增长率等。</li>
-        </ul>
-      </div>
-      
-      <div class="mb-4">
-        <h2 class="text-xl font-semibold">文献综述部分</h2>
-        <ul class="list-disc ml-6 mt-2 space-y-2">
-          <li>增加对SWOT和4P理论在电商领域应用的文献回顾，明确理论框架的合理性。</li>
-          <li>补充最新研究成果，特别是关于重直电商模式的创新和挑战。</li>
-        </ul>
+    <!-- 对话展示区域 - 只有这里可以滚动 -->
+    <div class="flex-1 overflow-y-auto">
+      <div class="p-6 space-y-6">
+        <!-- AI消息 -->
+        <div class="flex items-start space-x-4">
+          <%= lucide_icon "bot", class: "w-6 h-6 mt-1 flex-shrink-0 text-muted-foreground" %>
+          <div class="flex-1 bg-muted rounded-lg p-4">
+            <h2 class="text-xl font-semibold mb-2">研究背景部分</h2>
+            <ul class="list-disc ml-6 mt-2 space-y-2 text-muted-foreground">
+              <li>强化对电子商务市场的描述，聚焦重要电商的现状和挑战。</li>
+              <li>补充2023年重直电商市场的具体数据，如市场规模、用户增长率等。</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- 用户消息 -->
+        <div class="flex items-start space-x-4 justify-end">
+          <div class="flex-1 bg-primary rounded-lg p-4">
+            <div class="text-primary-foreground">
+              <p>好的，我会按照建议补充相关内容。</p>
+            </div>
+          </div>
+          <%= lucide_icon "user", class: "w-6 h-6 mt-1 flex-shrink-0 text-muted-foreground" %>
+        </div>
+
+        <!-- AI消息 -->
+        <div class="flex items-start space-x-4">
+          <%= lucide_icon "bot", class: "w-6 h-6 mt-1 flex-shrink-0 text-muted-foreground" %>
+          <div class="flex-1 bg-muted rounded-lg p-4">
+            <h2 class="text-xl font-semibold mb-2">文献综述部分</h2>
+            <ul class="list-disc ml-6 mt-2 space-y-2 text-muted-foreground">
+              <li>增加对SWOT和4P理论在电商领域应用的文献回顾，明确理论框架的合理性。</li>
+              <li>补充最新研究成果，特别是关于重直电商模式的创新和挑战。</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 底部编辑工具栏 -->
-    <div class="border-t border-gray-700 p-4">
+    <!-- 固定底部编辑工具栏 -->
+    <div class="flex-shrink-0 border-t border-border bg-background p-4">
       <div class="flex items-center space-x-4">
-        <button class="p-2 hover:bg-gray-700 rounded">
-          <%= lucide_icon "bold", class: "w-5 h-5" %>
-        </button>
-        <button class="p-2 hover:bg-gray-700 rounded">
-          <%= lucide_icon "italic", class: "w-5 h-5" %>
-        </button>
-        <button class="p-2 hover:bg-gray-700 rounded">
-          <%= lucide_icon "list", class: "w-5 h-5" %>
-        </button>
-        <button class="p-2 hover:bg-gray-700 rounded">
-          <%= lucide_icon "heading", class: "w-5 h-5" %>
-        </button>
-        <button class="p-2 hover:bg-gray-700 rounded">
-          <%= lucide_icon "link", class: "w-5 h-5" %>
-        </button>
+        <div class="flex items-center space-x-2 border-r border-border pr-4">
+          <button class="p-2 hover:bg-muted rounded">
+            <%= lucide_icon "bold", class: "w-5 h-5" %>
+          </button>
+          <button class="p-2 hover:bg-muted rounded">
+            <%= lucide_icon "italic", class: "w-5 h-5" %>
+          </button>
+          <button class="p-2 hover:bg-muted rounded">
+            <%= lucide_icon "list", class: "w-5 h-5" %>
+          </button>
+          <button class="p-2 hover:bg-muted rounded">
+            <%= lucide_icon "heading", class: "w-5 h-5" %>
+          </button>
+          <button class="p-2 hover:bg-muted rounded">
+            <%= lucide_icon "link", class: "w-5 h-5" %>
+          </button>
+        </div>
+        <div class="flex-1">
+          <div class="relative">
+            <textarea rows="1" class="w-full bg-muted rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-ring" placeholder="输入消息..."></textarea>
+            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 hover:bg-muted rounded">
+              <%= lucide_icon "send", class: "w-5 h-5" %>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- 右侧边栏 -->
-  <div class="w-64 bg-gray-800 p-4 border-l border-gray-700">
-    <div class="space-y-4">
-      <div class="p-2 hover:bg-gray-700 rounded cursor-pointer flex items-center space-x-2">
+  <!-- 固定右侧边栏 -->
+  <div class="w-64 bg-muted/50 border-l border-border flex flex-col flex-shrink-0">
+    <div class="p-4 border-b border-border">
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold text-lg">AI 助手</h2>
+        <button class="p-2 hover:bg-muted rounded-full" data-controller="theme-switcher">
+          <%= lucide_icon "sun", class: "w-5 h-5 dark:hidden" %>
+          <%= lucide_icon "moon", class: "w-5 h-5 hidden dark:block" %>
+        </button>
+      </div>
+    </div>
+    <div class="flex-1 p-4 space-y-4">
+      <div class="p-2 hover:bg-muted rounded cursor-pointer flex items-center space-x-2">
         <%= lucide_icon "pen-tool", class: "w-5 h-5" %>
         <h3 class="font-semibold">论文写手 - Essay Writer</h3>
       </div>
-      <div class="p-2 hover:bg-gray-700 rounded cursor-pointer flex items-center space-x-2">
+      <div class="p-2 hover:bg-muted rounded cursor-pointer flex items-center space-x-2">
         <%= lucide_icon "code", class: "w-5 h-5" %>
         <h3 class="font-semibold">编程辅助 CAN - Coding Assistance</h3>
       </div>
-      <div class="p-2 hover:bg-gray-700 rounded cursor-pointer flex items-center space-x-2">
+      <div class="p-2 hover:bg-muted rounded cursor-pointer flex items-center space-x-2">
         <%= lucide_icon "terminal", class: "w-5 h-5" %>
         <h3 class="font-semibold">Linux 终端 - Linux Terminal</h3>
       </div>
