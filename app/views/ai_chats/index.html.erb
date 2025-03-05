@@ -118,27 +118,11 @@
                 <%= render "ai_chats/assistants/form", assistant: assistant %>
               <% end %>
             <% end %>
-            <button class="w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2"
-                   data-action="assistant-menu#copyAssistant">
-              <%= lucide_icon "copy", class: "w-4 h-4" %>
-              <span>复制助手</span>
-            </button>
-            <button class="w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2"
-                   data-action="assistant-menu#clearTopics">
-              <%= lucide_icon "trash-2", class: "w-4 h-4" %>
-              <span>清空话题</span>
-            </button>
-            <button class="w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2"
-                   data-action="assistant-menu#saveToAgent">
-              <%= lucide_icon "save", class: "w-4 h-4" %>
-              <span>保存到智能体</span>
-            </button>
             <hr class="my-1 border-border">
-            <button class="w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2 text-destructive"
-                   data-action="assistant-menu#deleteAssistant">
+            <%= button_to assistant_path(assistant), method: :delete, class:"w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2 text-destructive" do %>
               <%= lucide_icon "trash", class: "w-4 h-4" %>
               <span>删除</span>
-            </button>
+            <% end %>
           </div>
         </div>
       <% end %>
@@ -158,4 +142,3 @@
       <% end %>
     </div>
   </div>
-</div>

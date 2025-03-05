@@ -2,7 +2,7 @@
 
 class Assistant < ActiveRecord::Base
   belongs_to :user
-  has_many :messages
+  has_many :messages, dependent: :destroy
   has_many :conversations, dependent: :destroy
 
   def llm

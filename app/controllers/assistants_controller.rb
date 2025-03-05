@@ -1,5 +1,5 @@
 class AssistantsController < ApplicationController
-  before_action :set_assistant, only: [ :show, :edit, :update, :destroy, :duplicate, :clear_topics, :set_last_used ]
+  before_action :set_assistant, only: [ :update, :destroy, :duplicate, :clear_topics, :set_last_used ]
 
   def create
     @assistant = current_user.assistants.build(assistant_params)
@@ -7,7 +7,7 @@ class AssistantsController < ApplicationController
     if @assistant.save
       redirect_to ai_chats_path, notice: "助手创建成功"
     else
-      redirect_to ai_chats_path, status: :unprocessable_entity
+      redirect_to ai_chats_path, error: "助手创建失败"
     end
   end
 
@@ -15,13 +15,25 @@ class AssistantsController < ApplicationController
     if @assistant.update(assistant_params)
       redirect_to ai_chats_path, notice: "助手更新成功"
     else
-      render :edit, status: :unprocessable_entity
+      redirect_to :ai_chats_path, error: "助手更新失败"
     end
   end
 
   def destroy
-    @assistant.destroy
-    redirect_to ai_chats_path, notice: "助手已删除"
+    # 清除所有将此助手作为last_used_assistant的用户引用
+    User.where(last_used_assistant: @assistant).update_all(last_used_assistant_id: nil)
+
+    if @assistant.destroy
+      respond_to do |format|
+        format.html { redirect_to ai_chats_path, notice: "助手已删除" }
+        format.json { head :ok }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to ai_chats_path, error: "助手删除失败" }
+        format.json { render json: { error: "删除失败" }, status: :unprocessable_entity }
+      end
+    end
   end
 
   # 复制助手

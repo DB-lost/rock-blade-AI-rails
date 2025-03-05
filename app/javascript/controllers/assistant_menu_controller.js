@@ -112,22 +112,4 @@ export default class extends Controller {
         // 实现保存到智能体的逻辑
         alert('将助手保存为独立智能体的功能正在开发中');
     }
-
-    deleteAssistant(event) {
-        const assistantId = this.element.dataset.assistantMenuIdValue;
-        if (confirm('确定要删除这个助手吗？')) {
-            fetch(`/assistants/${assistantId}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.reload();
-                    }
-                });
-        }
-    }
 }
