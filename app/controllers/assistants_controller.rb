@@ -1,19 +1,6 @@
 class AssistantsController < ApplicationController
   before_action :set_assistant, only: [ :show, :edit, :update, :destroy, :duplicate, :clear_topics, :set_last_used ]
 
-  def index
-    @assistants = current_user.assistants
-  end
-
-  def show
-    @conversations = @assistant.conversations.order(updated_at: :desc)
-    @conversation = @assistant.conversations.build
-  end
-
-  def new
-    @assistant = current_user.assistants.build
-  end
-
   def create
     @assistant = current_user.assistants.build(assistant_params)
 
@@ -24,12 +11,9 @@ class AssistantsController < ApplicationController
     end
   end
 
-  def edit
-  end
-
   def update
     if @assistant.update(assistant_params)
-      redirect_to assistants_path, notice: "助手更新成功"
+      redirect_to ai_chats_path, notice: "助手更新成功"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +21,7 @@ class AssistantsController < ApplicationController
 
   def destroy
     @assistant.destroy
-    redirect_to assistants_path, notice: "助手已删除"
+    redirect_to ai_chats_path, notice: "助手已删除"
   end
 
   # 复制助手
