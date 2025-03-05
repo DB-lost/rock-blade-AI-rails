@@ -1,4 +1,4 @@
-<%= render_form_for(Assistant.new, class: "w-full") do |form| %>
+<%= render_form_for(assistant || Assistant.new, class: "w-full") do |form| %>
   <div class="grid grid-cols-3 items-baseline mb-4">
     <%= form.label :title, class: "text-right mr-4 text-lg" %>
     <%= form.text_field :title, required: true, class: "col-span-2" %>
@@ -8,6 +8,10 @@
     <%= form.text_area :instructions, required: true, class: "col-span-2 mb-8" %>
   </div>
   <div class="flex justify-center">
-    <%= form.submit "Create Assistant" %>
+    <% if assistant&.persisted? %>
+      <%= form.submit "更新助手", method: :patch %>
+    <% else %>
+      <%= form.submit "创建助手" %>
+    <% end %>
   </div>
 <% end %>

@@ -7,6 +7,7 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :phone, null: true
       t.boolean :gender, null: true
       t.date :birthday, null: true
+      t.references :last_used_assistant, foreign_key: { to_table: :assistants }
 
       t.timestamps
     end

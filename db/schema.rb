@@ -69,7 +69,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_05_095022) do
     t.date "birthday"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "last_used_assistant_id"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
+    t.index ["last_used_assistant_id"], name: "index_users_on_last_used_assistant_id"
     t.index ["phone"], name: "index_users_on_phone", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
@@ -80,4 +82,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_05_095022) do
   add_foreign_key "messages", "assistants"
   add_foreign_key "messages", "conversations"
   add_foreign_key "sessions", "users"
+  add_foreign_key "users", "assistants", column: "last_used_assistant_id"
 end

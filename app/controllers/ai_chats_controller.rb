@@ -3,6 +3,7 @@ class AiChatsController < ApplicationController
 
   def index
     @assistants = current_user.assistants
+    @last_used_assistant = current_user.last_used_assistant
   end
 
   private

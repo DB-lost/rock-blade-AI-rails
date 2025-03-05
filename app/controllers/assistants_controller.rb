@@ -1,5 +1,5 @@
 class AssistantsController < ApplicationController
-  before_action :set_assistant, only: [ :show, :edit, :update, :destroy, :duplicate, :clear_topics ]
+  before_action :set_assistant, only: [ :show, :edit, :update, :destroy, :duplicate, :clear_topics, :set_last_used ]
 
   def index
     @assistants = current_user.assistants
@@ -43,7 +43,7 @@ class AssistantsController < ApplicationController
   # 复制助手
   def duplicate
     new_assistant = @assistant.dup
-    new_assistant.name = "#{@assistant.name} 副本"
+    new_assistant.title = "#{@assistant.title} 副本"
     new_assistant.user = current_user
 
     if new_assistant.save
@@ -60,6 +60,12 @@ class AssistantsController < ApplicationController
     else
       render json: { error: "清空话题失败" }, status: :unprocessable_entity
     end
+  end
+
+  # 设置最后使用的助手
+  def set_last_used
+    Current.user.update!(last_used_assistant: @assistant)
+    head :ok
   end
 
   private
