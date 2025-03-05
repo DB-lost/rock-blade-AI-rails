@@ -10,7 +10,9 @@
       <div id="conversation_messages" class="p-6 space-y-6">
         <% if @current_assistant.present? %>
           <% if @current_conversation&.messages&.any? %>
-            <%= render partial: "messages/#{message.role}_message", collection: @current_conversation.messages.ordered, as: :message %>
+            <% @current_conversation.messages.ordered.each do |message| %>
+              <%= render partial: "messages/#{message.role}_message", locals: { message: message } %>
+            <% end %>
           <% else %>
             <div class="text-center text-muted-foreground p-4">
               开始新的对话...

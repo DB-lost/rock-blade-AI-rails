@@ -14,7 +14,7 @@ class Conversation < ApplicationRecord
   def create_initial_message
     messages.create(
       role: "system",
-      content: assistant.system_message || "你好，我是#{assistant.title}，请问有什么我可以帮助你的？"
+      content: "你好，我是#{assistant.title}，请问有什么我可以帮助你的？"
     )
   end
 end
