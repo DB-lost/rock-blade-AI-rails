@@ -40,9 +40,12 @@ export default class extends Controller {
         if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault()
 
-            // 获取并检查内容
+            // 获取内容
             const content = this.inputTarget.value.trim()
             if (!content) return
+
+            // 保存内容的副本
+            const messageContent = content
 
             // 立即清空输入框并重置高度
             this.inputTarget.value = ""
@@ -54,7 +57,8 @@ export default class extends Controller {
                 upwardContainer.style.height = "auto"
             }
 
-            // 提交表单
+            // 设置表单内容并提交
+            this.inputTarget.value = messageContent
             event.target.form.requestSubmit()
         }
     }

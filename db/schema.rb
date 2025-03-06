@@ -33,15 +33,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_05_095022) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.integer "assistant_id"
     t.string "role"
     t.text "content"
     t.json "tool_calls"
     t.string "tool_call_id"
+    t.integer "conversation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "conversation_id", null: false
-    t.index ["assistant_id"], name: "index_messages_on_assistant_id"
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
   end
 
@@ -79,7 +77,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_05_095022) do
   add_foreign_key "assistants", "users"
   add_foreign_key "conversations", "assistants"
   add_foreign_key "conversations", "users"
-  add_foreign_key "messages", "assistants"
   add_foreign_key "messages", "conversations"
   add_foreign_key "sessions", "users"
   add_foreign_key "users", "assistants", column: "last_used_assistant_id"

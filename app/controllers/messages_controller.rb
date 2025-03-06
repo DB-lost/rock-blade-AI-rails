@@ -1,16 +1,20 @@
 class MessagesController < ApplicationController
-  before_action :set_conversation
-
   def create
+    begin
+      @conversation = Conversation.find(params.dig(:message, :conversation_id))
+    rescue ActiveRecord::RecordNotFound
+      raise StandardError.new("对话不存在")
+    end
+
+    # 3. 构建并保存消息
     @message = @conversation.messages.build(message_params)
     @message.role = "user"
-    @message.assistant = @conversation.assistant
 
     if @message.save
       GenerateAiResponseJob.perform_later(@message.id)
       head :ok
     else
-      raise StandardError.new("failed to create message")
+      raise StandardError.new(@message.errors.full_messages.join(", "))
     end
   rescue StandardError => e
     handle_error(e)
@@ -18,11 +22,7 @@ class MessagesController < ApplicationController
 
   private
 
-  def set_conversation
-    @conversation = Conversation.find(params[:conversation_id])
-  end
-
   def message_params
-    params.require(:message).permit(:content)
+    params.require(:message).permit(:content, :conversation_id)
   end
 end
