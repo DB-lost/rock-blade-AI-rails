@@ -41,17 +41,4 @@ class MessagesController < ApplicationController
   def message_params
     params.require(:message).permit(:content, :conversation_id)
   end
-
-  def handle_error(error)
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.replace(
-          "error_messages",
-          partial: "shared/error_messages",
-          locals: { errors: [ error.message ] }
-        )
-      end
-      format.html { redirect_back fallback_location: root_path, alert: error.message }
-    end
-  end
 end
