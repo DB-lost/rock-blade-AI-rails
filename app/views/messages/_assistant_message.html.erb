@@ -1,8 +1,45 @@
-<div class="flex items-start space-x-4">
+<div id="<%= dom_id(message) %>" class="flex items-start space-x-4">
   <%= lucide_icon "bot", class: "w-6 h-6 mt-1 flex-shrink-0 text-muted-foreground" %>
   <div class="flex-1 bg-muted rounded-lg p-4">
-    <div class="text-muted-foreground">
-      <%= message.content %>
+    <div class="text-muted-foreground markdown-content">
+      <% if message.content.present? %>
+        <%= message.content %>
+      <% else %>
+        <div class="assistant-typing">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
+
+<style>
+  .assistant-typing {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    background-color: currentColor;
+    border-radius: 50%;
+    animation: typing 1.5s infinite ease-in-out;
+  }
+  .dot:nth-child(2) {
+    animation-delay: 0.5s;
+  }
+  .dot:nth-child(3) {
+    animation-delay: 1s;
+  }
+  @keyframes typing {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+</style>

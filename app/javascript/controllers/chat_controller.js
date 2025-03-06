@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["container", "input", "streamPlaceholder"]
+    static targets = ["container", "input"]
 
     connect() {
         this.scrollToBottom()
@@ -10,8 +10,10 @@ export default class extends Controller {
         document.addEventListener("turbo:before-stream-render", (event) => {
             const turboStream = event.detail?.newStream
 
-            // 处理新消息添加和流式更新
-            if (turboStream?.action === "append" || turboStream?.action === "update") {
+            // 处理新消息添加、替换和更新
+            if (turboStream?.action === "append" ||
+                turboStream?.action === "replace" ||
+                turboStream?.action === "update") {
                 // 更高效的滚动处理
                 this.scrollToBottomDebounced()
             }
@@ -32,6 +34,41 @@ export default class extends Controller {
             // 然后执行调整
             this.adjustHeight({ target: this.inputTarget })
         }
+
+        // 添加 MutationObserver 来监听消息容器的变化
+        this.setupMutationObserver()
+    }
+
+    disconnect() {
+        // 断开连接时关闭 MutationObserver
+        if (this.observer) {
+            this.observer.disconnect()
+        }
+    }
+
+    // 设置 MutationObserver 来监听消息容器的变化
+    setupMutationObserver() {
+        const messagesContainer = document.getElementById('conversation_messages')
+        if (!messagesContainer) return
+
+        this.observer = new MutationObserver((mutations) => {
+            let shouldScroll = false
+
+            mutations.forEach(mutation => {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    shouldScroll = true
+                }
+            })
+
+            if (shouldScroll) {
+                this.scrollToBottomDebounced()
+            }
+        })
+
+        this.observer.observe(messagesContainer, {
+            childList: true,
+            subtree: true
+        })
     }
 
     // 防抖函数

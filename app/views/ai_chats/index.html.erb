@@ -8,9 +8,16 @@
     <div class="flex-1 overflow-y-auto" data-chat-target="container">
       <div id="conversation_messages" class="p-6 space-y-6">
         <% if @current_assistant.present? %>
-          <% if @current_conversation&.messages&.any? %>
-            <% @current_conversation.messages.ordered.each do |message| %>
-              <%= render partial: "messages/#{message.role}_message", locals: { message: message } %>
+          <% if @current_conversation.present? %>
+            <%= turbo_stream_from "conversation_#{@current_conversation.id}" %>
+            <% if @current_conversation&.messages&.any? %>
+              <% @current_conversation.messages.ordered.each do |message| %>
+                <%= render partial: "messages/#{message.role}_message", locals: { message: message } %>
+              <% end %>
+            <% else %>
+              <div class="text-center text-muted-foreground p-4">
+                开始新的对话...
+              </div>
             <% end %>
           <% else %>
             <div class="text-center text-muted-foreground p-4">
@@ -62,33 +69,40 @@
             </button>
           </div>
           <div class="flex-1">
-            <%= render_form_for(Message.new, class: "w-full") do |form| %>
-              <%= turbo_frame_tag "error_messages" do %>
-                <%= render "shared/error_messages", errors: @current_conversation.errors if @current_conversation.errors.any? %>
-              <% end %>
-              <%= form.hidden_field :conversation_id, value: @current_conversation&.id %>
-              <div class="relative">
-                <!-- 文本区域 -->
-                <div class="resize-upward w-full">
-                  <div class="resize-handle" data-controller="resize"></div>
-                  <%= form.text_area :content, 
-                    class: "w-full bg-muted rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-ring pr-12",
-                    placeholder: "输入消息...", 
-                    rows: 2,
-                    data: {
-                      chat_target: "input",
-                      action: "keydown->chat#checkSubmit input->chat#adjustHeight",
-                      resize_target: "textarea"
-                    } 
-                  %>
-                </div>
-                
-                <!-- 发送按钮 - 完全独立于resize-upward -->
-                <%= button_tag type: "submit", 
-                  class: "absolute right-3 bottom-3 p-2 hover:bg-muted rounded" do %>
-                  <%= lucide_icon "send", class: "w-5 h-5" %>
+            <%= turbo_frame_tag "new_message_form" do %>
+              <%= render_form_for(Message.new, class: "w-full", data: { controller: "autosubmit" }) do |form| %>
+                <%= turbo_frame_tag "error_messages" do %>
+                  <%= render "shared/error_messages", errors: @current_conversation.errors if @current_conversation&.errors&.any? %>
                 <% end %>
-              </div>
+                <%= form.hidden_field :conversation_id, value: @current_conversation&.id %>
+                <div class="relative">
+                  <!-- 文本区域 -->
+                  <div class="resize-upward w-full">
+                    <div class="resize-handle" data-controller="resize"></div>
+                    <%= form.text_area :content, 
+                      class: "w-full bg-muted rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-ring pr-12",
+                      placeholder: "输入消息...", 
+                      rows: 2,
+                      data: {
+                        chat_target: "input",
+                        action: "keydown->chat#checkSubmit input->chat#adjustHeight",
+                        resize_target: "textarea",
+                        autosubmit_target: "input"
+                      } 
+                    %>
+                  </div>
+                  
+                  <!-- 发送按钮 - 完全独立于resize-upward -->
+                  <%= button_tag type: "submit", 
+                    class: "absolute right-3 bottom-3 p-2 hover:bg-muted rounded",
+                    data: { 
+                      action: "click->autosubmit#submit",
+                      autosubmit_target: "submit" 
+                    } do %>
+                    <%= lucide_icon "send", class: "w-5 h-5" %>
+                  <% end %>
+                </div>
+              <% end %>
             <% end %>
           </div>
         </div>
