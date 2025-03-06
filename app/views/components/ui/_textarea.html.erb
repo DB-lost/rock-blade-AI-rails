@@ -6,4 +6,6 @@
   <%= options[:disabled] ? "disabled" : "" %>
   <%= options[:required] ? "required" : "" %>
   <%= options[:readonly] ? "readonly" : "" %>
-  <%= options[:rows] ? "rows" : "" %>><%= value %></textarea>
+  <%= options[:rows] ? "rows=#{options[:rows]}" : "" %>
+  <%= options[:data] ? raw(options[:data].map { |k, v| "data-#{k.to_s.gsub('_', '-')}=\"#{v}\"" }.join(' ')) : '' %>
+><%= value %></textarea>

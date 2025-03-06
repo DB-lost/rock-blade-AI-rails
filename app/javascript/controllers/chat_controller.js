@@ -18,6 +18,14 @@ export default class extends Controller {
 
         // 初始化时调整高度
         if (this.hasInputTarget) {
+            // 首先确保高度是自动的
+            this.inputTarget.style.height = "auto"
+            const upwardContainer = this.inputTarget.closest('.resize-upward')
+            if (upwardContainer) {
+                upwardContainer.style.height = "auto"
+            }
+
+            // 然后执行调整
             this.adjustHeight({ target: this.inputTarget })
         }
     }
@@ -39,6 +47,12 @@ export default class extends Controller {
             // 立即清空输入框并重置高度
             this.inputTarget.value = ""
             this.inputTarget.style.height = "auto"
+
+            // 同时重置resize-upward容器的高度
+            const upwardContainer = this.inputTarget.closest('.resize-upward')
+            if (upwardContainer) {
+                upwardContainer.style.height = "auto"
+            }
 
             // 提交表单
             event.target.form.requestSubmit()
