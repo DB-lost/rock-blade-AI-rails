@@ -5,10 +5,7 @@ class AiChatService
 
   def initialize(assistant)
     @assistant = assistant
-    @langchain_assistant = Langchain::Assistant.new(
-      llm: assistant.llm,
-      instructions: assistant.instructions
-    )
+    @langchain_assistant = create_langchain_assistant
   end
 
   def generate_response(history)
@@ -124,5 +121,15 @@ class AiChatService
         role: "assistant"
       )
     end
+  end
+
+  private
+
+  def create_langchain_assistant
+    Langchain::Assistant.new(
+      llm: LLMService.create_llm,
+      instructions: @assistant.instructions || "你是一个功能齐全的AI助手，可以使用不同工具。",
+      tools: AssistantToolsService.register_tools
+    )
   end
 end
