@@ -1,20 +1,24 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["container", "input"]
+    static targets = ["container", "input", "streamPlaceholder"]
 
     connect() {
         this.scrollToBottom()
 
-        // 监听Turbo Stream事件，每当新消息添加时滚动到底部
+        // 监听 Turbo Stream 事件
         document.addEventListener("turbo:before-stream-render", (event) => {
             const turboStream = event.detail?.newStream
 
-            if (turboStream?.action === "append") {
-                // 等渲染完成后滚动
-                setTimeout(() => this.scrollToBottom(), 50)
+            // 处理新消息添加和流式更新
+            if (turboStream?.action === "append" || turboStream?.action === "update") {
+                // 更高效的滚动处理
+                this.scrollToBottomDebounced()
             }
         })
+
+        // 初始化防抖函数
+        this.scrollToBottomDebounced = this.debounce(this.scrollToBottom.bind(this), 50)
 
         // 初始化时调整高度
         if (this.hasInputTarget) {
@@ -30,6 +34,19 @@ export default class extends Controller {
         }
     }
 
+    // 防抖函数
+    debounce(func, wait) {
+        let timeout
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout)
+                func(...args)
+            }
+            clearTimeout(timeout)
+            timeout = setTimeout(later, wait)
+        }
+    }
+
     scrollToBottom() {
         const container = this.containerTarget
         container.scrollTop = container.scrollHeight
@@ -40,13 +57,12 @@ export default class extends Controller {
         if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault()
 
-            // 获取内容
+            // 获取并检查内容
             const content = this.inputTarget.value.trim()
             if (!content) return
 
-            // 保存内容的副本
-            const messageContent = content
-
+            // 提交表单
+            event.target.form.requestSubmit()
             // 立即清空输入框并重置高度
             this.inputTarget.value = ""
             this.inputTarget.style.height = "auto"
@@ -57,9 +73,14 @@ export default class extends Controller {
                 upwardContainer.style.height = "auto"
             }
 
-            // 设置表单内容并提交
-            this.inputTarget.value = messageContent
-            event.target.form.requestSubmit()
+            // 禁用输入框，防止重复提交
+            this.inputTarget.disabled = true
+
+            // 1秒后重新启用输入框
+            setTimeout(() => {
+                this.inputTarget.disabled = false
+                this.inputTarget.focus()
+            }, 1000)
         }
     }
 
