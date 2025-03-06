@@ -32,8 +32,8 @@ class LLMService
 
     def doubao_options
       {
-        chat_model: Rails.application.credentials.dig(:doubao, :ARK_DOUBAO_1_5_PRO_32K_MODEL),
-        embedding_model: Rails.application.credentials.dig(:doubao, :ARK_DOUBAO_EMBEDDING_LARGE_MODEL),
+        chat_completion_model_name: Rails.application.credentials.dig(:doubao, :ARK_DOUBAO_1_5_PRO_32K_MODEL),
+        embeddings_model_name: Rails.application.credentials.dig(:doubao, :ARK_DOUBAO_EMBEDDING_LARGE_MODEL),
         dimensions: 2560
       }
     end

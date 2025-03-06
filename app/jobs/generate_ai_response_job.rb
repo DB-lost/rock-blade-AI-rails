@@ -18,8 +18,7 @@ class GenerateAiResponseJob < ApplicationJob
     # 创建AI回复消息
     conversation.messages.create!(
       content: response,
-      role: "assistant",
-      assistant: assistant
+      role: "assistant"
     )
   end
 end
