@@ -1,6 +1,5 @@
 class RegistrationsController < ApplicationController
   include RegistrationSteps
-  include ErrorHandling
 
   allow_unauthenticated_access only: [ :new, :create, :send_verification_code, :change_step ]
 
@@ -41,8 +40,10 @@ class RegistrationsController < ApplicationController
     if SmsService.send_code(params[:phone])
       render json: { status: "success" }
     else
-      render json: { status: "error", message: "Failed to send code" }, status: 422
+      raise StandardError.new("Failed to send verification code")
     end
+  rescue StandardError => e
+    handle_error(e)
   end
 
   def change_step
