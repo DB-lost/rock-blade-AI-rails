@@ -16,9 +16,10 @@ class ConversationsController < ApplicationController
     if @conversation.save
       redirect_to assistant_conversation_path(@assistant, @conversation)
     else
-      @conversations = @assistant.conversations.order(updated_at: :desc)
-      render "assistants/show", status: :unprocessable_entity
+      raise StandardError.new("对话创建失败")
     end
+  rescue StandardError => e
+    handle_error(e)
   end
 
   private

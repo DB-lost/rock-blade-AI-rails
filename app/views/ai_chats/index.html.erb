@@ -1,7 +1,6 @@
 <% content_for :head do %>
   <%= tag.meta name: "last-used-assistant-id", content: @current_assistant&.id %>
 <% end %>
-
 <div class="h-full flex bg-background">
   <!-- 主要内容区域 -->
   <div class="flex-1 flex flex-col">
@@ -64,6 +63,9 @@
           </div>
           <div class="flex-1">
             <%= render_form_for(Message.new, class: "w-full") do |form| %>
+              <%= turbo_frame_tag "error_messages" do %>
+                <%= render "shared/error_messages", errors: @current_conversation.errors if @current_conversation.errors.any? %>
+              <% end %>
               <%= form.hidden_field :conversation_id, value: @current_conversation&.id %>
               <div class="relative">
                 <!-- 文本区域 -->

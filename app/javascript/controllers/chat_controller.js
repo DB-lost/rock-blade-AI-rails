@@ -31,14 +31,17 @@ export default class extends Controller {
         // 按Enter发送，按Shift+Enter换行
         if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault()
-            // 清除内容前先保存高度
-            const currentHeight = this.inputTarget.style.height
+
+            // 获取并检查内容
+            const content = this.inputTarget.value.trim()
+            if (!content) return
+
+            // 立即清空输入框并重置高度
+            this.inputTarget.value = ""
+            this.inputTarget.style.height = "auto"
+
+            // 提交表单
             event.target.form.requestSubmit()
-            // 提交后重置textarea高度
-            setTimeout(() => {
-                this.inputTarget.style.height = "auto"
-                this.inputTarget.value = ""
-            }, 100)
         }
     }
 

@@ -10,8 +10,10 @@ class MessagesController < ApplicationController
       GenerateAiResponseJob.perform_later(@message.id)
       head :ok
     else
-      render json: { error: @message.errors.full_messages.join(", ") }, status: :unprocessable_entity
+      raise StandardError.new("failed to create message")
     end
+  rescue StandardError => e
+    handle_error(e)
   end
 
   private
