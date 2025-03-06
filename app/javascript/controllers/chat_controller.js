@@ -98,26 +98,9 @@ export default class extends Controller {
             const content = this.inputTarget.value.trim()
             if (!content) return
 
-            // 提交表单
-            event.target.form.requestSubmit()
-            // 立即清空输入框并重置高度
-            this.inputTarget.value = ""
-            this.inputTarget.style.height = "auto"
-
-            // 同时重置resize-upward容器的高度
-            const upwardContainer = this.inputTarget.closest('.resize-upward')
-            if (upwardContainer) {
-                upwardContainer.style.height = "auto"
-            }
-
-            // 禁用输入框，防止重复提交
-            this.inputTarget.disabled = true
-
-            // 1秒后重新启用输入框
-            setTimeout(() => {
-                this.inputTarget.disabled = false
-                this.inputTarget.focus()
-            }, 1000)
+            // 触发自定义事件让autosubmit控制器处理提交
+            const submitEvent = new CustomEvent('chat:submit', { bubbles: true })
+            this.inputTarget.dispatchEvent(submitEvent)
         }
     }
 

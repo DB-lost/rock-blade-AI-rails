@@ -6,6 +6,11 @@ class MessagesController < ApplicationController
       raise StandardError.new("对话不存在")
     end
 
+    # 检查消息内容是否存在
+    if params.dig(:message, :content).blank?
+      raise StandardError.new("消息内容不能为空")
+    end
+
     # 构建并保存消息
     @message = @conversation.messages.build(message_params)
     @message.role = "user"
