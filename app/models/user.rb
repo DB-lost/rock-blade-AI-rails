@@ -1,8 +1,4 @@
 class User < ApplicationRecord
-  vectorsearch
-
-  after_save :upsert_to_vectorsearch
-
   attr_accessor :verification_code
   has_secure_password
   has_many :sessions, dependent: :destroy
