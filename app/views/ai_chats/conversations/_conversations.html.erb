@@ -1,11 +1,11 @@
 <!-- 对话列表区域 -->
 <div class="p-4 space-y-2 overflow-y-auto max-h-[calc(100vh-12rem)]">
     <% @conversations.each do |conversation| %>
-    <div class="p-2 hover:bg-muted rounded cursor-pointer flex items-center space-x-2 relative group border-2 border-transparent"
+    <div class="p-2 hover:bg-muted rounded cursor-pointer flex items-center space-x-2 relative group border-2 <%= conversation == @current_conversation ? 'bg-muted border-primary' : 'border-transparent' %>"
             data-controller="conversation-menu"
             data-action="contextmenu->conversation-menu#showMenu click->conversation-menu#handleClick"
             data-conversation-menu-id-value="<%= conversation.id %>"
-            data-conversation-menu-active-value="false">
+            data-conversation-menu-active-value="<%= conversation == @current_conversation %>">
         <div class="flex items-center space-x-2 w-full cursor-pointer" data-action="click->conversation-menu#selectConversation">
         <%= lucide_icon "message-square", class: "w-5 h-5" %>
         <h3 class="font-semibold truncate"><%= conversation.title || "未命名对话" %></h3>

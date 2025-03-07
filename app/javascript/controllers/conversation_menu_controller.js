@@ -15,6 +15,11 @@ export default class extends Controller {
                 this.hideMenu();
             }
         });
+
+        // 如果初始化时active为true，设置选中状态
+        if (this.activeValue) {
+            this.setActive(true);
+        }
     }
 
     handleClick(event) {
@@ -104,4 +109,4 @@ export default class extends Controller {
             this.menuTarget.classList.add('hidden');
         }
     }
-} 
+}
