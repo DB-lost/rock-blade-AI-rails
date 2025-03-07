@@ -26,9 +26,15 @@ export default class extends Controller {
             }
         }
 
-        // 更新隐藏字段的值
+        // 使用 Rails 的数组参数命名约定
         if (this.hasSelectedToolsTarget) {
-            this.selectedToolsTarget.value = JSON.stringify(this.selectedToolTypes)
+            // 清空现有的隐藏字段
+            this.selectedToolsTarget.value = ""
+
+            // 如果有选中的工具，则设置为 JSON 字符串
+            if (this.selectedToolTypes.length > 0) {
+                this.selectedToolsTarget.value = JSON.stringify(this.selectedToolTypes)
+            }
         }
     }
 
