@@ -34,8 +34,7 @@ Rails.application.routes.draw do
     member do
       post :set_last_used  # 设置最后使用的助手
     end
+    resources :conversations, only: [ :create, :destroy ]
   end
-
-  resources :conversations
   resources :messages, only: [ :create ]
 end

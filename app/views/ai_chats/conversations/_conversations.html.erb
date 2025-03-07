@@ -28,7 +28,7 @@
             <% end %>
         <% end %>
         <hr class="my-1 border-border">
-        <%= button_to conversation_path(conversation), method: :delete, class:"w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2 text-destructive" do %>
+        <%= button_to assistant_conversation_path(@current_assistant, conversation), method: :delete, class:"w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2 text-destructive" do %>
             <%= lucide_icon "trash", class: "w-4 h-4" %>
             <span>删除对话</span>
         <% end %>
