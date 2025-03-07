@@ -199,41 +199,8 @@ class GenerateAiResponseJob < ApplicationJob
   end
 
   def get_selected_tools
-    tools = AssistantToolsService.register_tools
-
-    # 解析 selected_tools 参数
-    selected_tool_types = []
-    if @selected_tools.present?
-      begin
-        # 尝试解析 JSON 字符串
-        if @selected_tools.is_a?(String)
-          selected_tool_types = JSON.parse(@selected_tools)
-        elsif @selected_tools.is_a?(Array)
-          selected_tool_types = @selected_tools
-        end
-      rescue => e
-        Rails.logger.error("解析 selected_tools 参数时出错: #{e.message}")
-        Rails.logger.error("原始参数: #{@selected_tools.inspect}")
-      end
-    end
-
-    # 添加网络搜索工具
-    if selected_tool_types.include?("network")
-      # 使用 Rails 凭证获取 API 密钥
-      api_key = Rails.application.credentials.dig(:tools, :tavily_key)
-      if api_key.present?
-        tools << Langchain::Tool::Tavily.new(api_key: api_key)
-      else
-        Rails.logger.warn("未找到 Tavily API 密钥，无法添加网络搜索工具")
-      end
-    end
-
-    # 添加知识库工具
-    if selected_tool_types.include?("knowledge")
-      # 这里可以添加知识库工具的实现
-    end
-
-    tools
+    selected_tool_types = AssistantToolsService.parse_tool_types(@selected_tools)
+    AssistantToolsService.register_tools(selected_tool_types)
   end
 
   def handle_error(e)
