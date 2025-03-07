@@ -8,23 +8,6 @@ class AiChatService
     @langchain_assistant = create_langchain_assistant
   end
 
-  def generate_response(history)
-    begin
-      setup_langchain_assistant(history)
-
-      # 运行助手并自动执行工具
-      @langchain_assistant.run!
-
-      # 获取最后一条消息的内容
-      @langchain_assistant.messages.last&.content ||
-        "抱歉，我在处理您的请求时遇到了问题。请稍后再试。"
-    rescue => e
-      Rails.logger.error("AI响应生成错误: #{e.inspect}")
-      Rails.logger.error(e.backtrace.join("\n"))
-      "抱歉，我在处理您的请求时遇到了问题。请稍后再试。"
-    end
-  end
-
   # 流式生成响应，用于实时更新
   def generate_streaming_response(conversation_id, history)
     begin
@@ -35,52 +18,17 @@ class AiChatService
         role: "assistant"
       )
 
-      # 保存message_id以便在线程中使用
-      message_id = message.id
+      # 启动后台任务
+      GenerateAiResponseJob.perform_later(
+        message.id,
+        history,
+        assistant.instructions
+      )
 
-      # 运行助手并实时更新消息 - 使用线程安全的方式
-      Thread.new do
-        # 确保线程有自己的数据库连接
-        ActiveRecord::Base.connection_pool.with_connection do
-          begin
-            setup_langchain_assistant(history)
-
-            # 定义回调函数来处理流式响应
-            add_message_callback = lambda do |msg|
-              if msg.role == "assistant"
-                content = if msg.tool_calls.present?
-                  # 工具调用
-                  format_tool_calls(msg.tool_calls)
-                else
-                  # 普通文本回复
-                  msg.content.presence || "正在处理响应..."
-                end
-
-                # 更新消息内容
-                update_message_safely(message_id, content)
-              end
-            end
-
-            # 设置回调并运行助手
-            @langchain_assistant.add_message_callback = add_message_callback
-            @langchain_assistant.run!
-
-            # 获取最终结果
-            final_content = @langchain_assistant.messages.last&.content || "处理完成"
-            update_message_safely(message_id, final_content)
-          rescue => e
-            handle_streaming_error(e, message_id)
-          ensure
-            # 确保连接返回到连接池
-            ActiveRecord::Base.connection_pool.release_connection
-          end
-        end
-      end
-
+      # 返回初始消息对象，让控制器可以立即返回响应
       message
     rescue => e
       Rails.logger.error("AI流式响应初始化错误: #{e.inspect}")
-      Rails.logger.error(e.backtrace.join("\n"))
 
       # 创建错误消息
       Message.create!(
