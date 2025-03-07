@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// 控制助手列表和右键菜单功能
+// 控制对话列表和右键菜单功能
 export default class extends Controller {
     static targets = ["menu"]
     static values = {
@@ -15,12 +15,6 @@ export default class extends Controller {
                 this.hideMenu();
             }
         });
-
-        // 初始化时检查是否是上次使用的assistant
-        const lastUsedId = document.querySelector('meta[name="last-used-assistant-id"]')?.content;
-        if (lastUsedId === this.idValue) {
-            this.setActive(true);
-        }
     }
 
     handleClick(event) {
@@ -34,32 +28,21 @@ export default class extends Controller {
         this.hideMenu();
     }
 
-    selectAssistant(event) {
-        // 清除其他助手的选中状态
-        document.querySelectorAll('[data-controller="assistant-menu"]').forEach(element => {
+    selectConversation(event) {
+        // 清除其他对话的选中状态
+        document.querySelectorAll('[data-controller="conversation-menu"]').forEach(element => {
             if (element !== this.element) {
-                const controller = this.application.getControllerForElementAndIdentifier(element, 'assistant-menu');
+                const controller = this.application.getControllerForElementAndIdentifier(element, 'conversation-menu');
                 if (controller) controller.setActive(false);
             }
         });
 
-        // 设置当前助手为选中状态
+        // 设置当前对话为选中状态
         this.setActive(true);
 
-        // 记录最后使用的assistant
-        const assistantId = this.idValue;
-        fetch(`/assistants/${assistantId}/set_last_used`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            if (response.ok) {
-                // 加载该assistant的对话内容
-                Turbo.visit(`/ai_chats?assistant_id=${assistantId}`, { action: 'replace' });
-            }
-        });
+        // 加载该对话的内容
+        const conversationId = this.idValue;
+        Turbo.visit(`/ai_chats?conversation_id=${conversationId}`, { action: 'replace' });
     }
 
     setActive(active) {
@@ -81,7 +64,7 @@ export default class extends Controller {
         event.stopPropagation();
 
         // 隐藏所有其他菜单
-        document.querySelectorAll('[data-assistant-menu-target="menu"]').forEach(menu => {
+        document.querySelectorAll('[data-conversation-menu-target="menu"]').forEach(menu => {
             menu.classList.add('hidden');
         });
 
@@ -96,7 +79,6 @@ export default class extends Controller {
         if (!this.hasMenuTarget) return;
 
         const menu = this.menuTarget;
-        const rect = this.element.getBoundingClientRect();
 
         // 设置菜单位置
         menu.style.top = `${event.clientY}px`;
@@ -112,7 +94,7 @@ export default class extends Controller {
         }
     }
 
-    // 防止菜单点击事件冒泡到assistant元素
+    // 防止菜单点击事件冒泡到conversation元素
     preventBubble(event) {
         event.stopPropagation();
     }
@@ -122,4 +104,4 @@ export default class extends Controller {
             this.menuTarget.classList.add('hidden');
         }
     }
-}
+} 

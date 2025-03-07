@@ -23,8 +23,10 @@ class AiChatsController < ApplicationController
         )
       end
       @current_conversation = conversation
+      @conversations = @current_assistant.conversations.order(updated_at: :desc)
+    else
+      @conversations = []
     end
-    @conversations = @current_assistant.conversations.order(updated_at: :desc)
   end
 
   private

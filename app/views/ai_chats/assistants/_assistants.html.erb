@@ -3,7 +3,7 @@
     <% @assistants.each do |assistant| %>
     <div class="p-2 hover:bg-muted rounded cursor-pointer flex items-center space-x-2 relative group border-2 border-transparent"
             data-controller="assistant-menu"
-            data-action="contextmenu->assistant-menu#showMenu"
+            data-action="contextmenu->assistant-menu#showMenu click->assistant-menu#handleClick"
             data-assistant-menu-id-value="<%= assistant.id %>"
             data-assistant-menu-active-value="false">
         <div class="flex items-center space-x-2 w-full cursor-pointer" data-action="click->assistant-menu#selectAssistant">
@@ -18,7 +18,8 @@
         </div>
         
         <!-- 右键菜单 -->
-        <div class="hidden absolute right-0 top-0 mt-8 bg-background border border-border rounded-md shadow-md z-10 w-40 py-1"
+        <div class="hidden fixed bg-background border border-border rounded-md shadow-md z-50 w-40 py-1"
+            style="right: 20px;"
             data-assistant-menu-target="menu"
             data-action="click->assistant-menu#preventBubble">
         <%= render_dialog do %>
