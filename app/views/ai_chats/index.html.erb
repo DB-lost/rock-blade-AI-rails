@@ -50,23 +50,50 @@
     <!-- 固定底部编辑工具栏 - 仅在选中助手时显示 -->
     <% if @current_assistant.present? %>
       <div class="flex-shrink-0 border-t border-border bg-background p-4">
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-4" data-controller="tools">
           <div class="flex items-center space-x-2 border-r border-border pr-4">
-            <button class="p-2 hover:bg-muted rounded">
-              <%= lucide_icon "bold", class: "w-5 h-5" %>
-            </button>
-            <button class="p-2 hover:bg-muted rounded">
-              <%= lucide_icon "italic", class: "w-5 h-5" %>
-            </button>
-            <button class="p-2 hover:bg-muted rounded">
-              <%= lucide_icon "list", class: "w-5 h-5" %>
-            </button>
-            <button class="p-2 hover:bg-muted rounded">
-              <%= lucide_icon "heading", class: "w-5 h-5" %>
-            </button>
-            <button class="p-2 hover:bg-muted rounded">
-              <%= lucide_icon "link", class: "w-5 h-5" %>
-            </button>
+            <%= render_tooltip do %>
+              <%= tooltip_trigger do %>
+                <%= render_button variant: :ghost,
+                      class: "tool-button",
+                      data: {
+                        tools_target: "button",
+                        action: "click->tools#toggle",
+                        tool_type: "network",
+                        state: "unselected"
+                      } do %>
+                  <%= lucide_icon "globe", class: "w-5 h-5" %>
+                <% end %>
+              <% end %>
+              <%= tooltip_content do %>
+                <div class="grid gap-2">
+                  <div class="space-y-2">
+                    <p class="text-sm text-muted-foreground">联网搜索</p>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+            <%= render_tooltip do %>
+              <%= tooltip_trigger do %>
+                <%= render_button variant: :ghost,
+                      class: "tool-button",
+                      data: {
+                        tools_target: "button",
+                        action: "click->tools#toggle",
+                        tool_type: "knowledge",
+                        state: "unselected"
+                      } do %>
+                  <%= lucide_icon "book-open", class: "w-5 h-5" %>
+                <% end %>
+              <% end %>
+              <%= tooltip_content do %>
+                <div class="grid gap-2">
+                  <div class="space-y-2">
+                    <p class="text-sm text-muted-foreground">知识库</p>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
           </div>
           <div class="flex-1">
             <%= turbo_frame_tag "new_message_form" do %>
@@ -75,6 +102,7 @@
                   <%= render "shared/error_messages", errors: @current_conversation.errors if @current_conversation&.errors&.any? %>
                 <% end %>
                 <%= form.hidden_field :conversation_id, value: @current_conversation&.id %>
+                <%= form.hidden_field :selected_tools, data: { tools_target: "selectedTools" } %>
                 <div class="relative">
                   <!-- 文本区域 -->
                   <div class="resize-upward w-full">
