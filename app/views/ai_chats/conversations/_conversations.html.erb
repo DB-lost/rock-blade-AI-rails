@@ -1,0 +1,37 @@
+<!-- 对话列表区域 -->
+<div class="p-4 space-y-2 overflow-y-auto max-h-[calc(100vh-12rem)]">
+    <% @conversations.each do |conversation| %>
+    <div class="p-2 hover:bg-muted rounded cursor-pointer flex items-center space-x-2 relative group border-2 border-transparent"
+            data-controller="conversation-menu"
+            data-action="contextmenu->conversation-menu#showMenu"
+            data-conversation-menu-id-value="<%= conversation.id %>"
+            data-conversation-menu-active-value="false">
+        <div class="flex items-center space-x-2 w-full cursor-pointer" data-action="click->conversation-menu#selectConversation">
+        <%= lucide_icon "message-square", class: "w-5 h-5" %>
+        <h3 class="font-semibold truncate"><%= conversation.title || "未命名对话" %></h3>
+        </div>
+        
+        <!-- 右键菜单 -->
+        <div class="hidden absolute right-0 top-0 mt-8 bg-background border border-border rounded-md shadow-md z-10 w-40 py-1"
+            data-conversation-menu-target="menu"
+            data-action="click->conversation-menu#preventBubble">
+        <%= render_dialog do %>
+            <%= dialog_trigger do %>
+            <button class="w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2">
+                <%= lucide_icon "edit-3", class: "w-4 h-4" %>
+                <span>编辑对话</span>
+            </button>
+            <% end %>
+            <%= dialog_content do %>
+            <%= render "ai_chats/conversations/form", conversation: conversation %>
+            <% end %>
+        <% end %>
+        <hr class="my-1 border-border">
+        <%= button_to conversation_path(conversation), method: :delete, class:"w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2 text-destructive" do %>
+            <%= lucide_icon "trash", class: "w-4 h-4" %>
+            <span>删除对话</span>
+        <% end %>
+        </div>
+    </div>
+    <% end %>
+</div>

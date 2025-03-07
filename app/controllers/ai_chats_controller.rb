@@ -24,6 +24,7 @@ class AiChatsController < ApplicationController
       end
       @current_conversation = conversation
     end
+    @conversations = @current_assistant.conversations.order(updated_at: :desc)
   end
 
   private
