@@ -2,6 +2,7 @@
 
 class Message < ActiveRecord::Base
   belongs_to :conversation
+  has_many :tool_usages, dependent: :destroy
 
   validates :content, presence: true, unless: :assistant_with_pending_response?
   validates :role, presence: true, inclusion: { in: %w[system assistant user] }

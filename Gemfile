@@ -74,8 +74,8 @@ gem "lucide-rails", "~> 0.5.1"
 
 # AI
 gem "ruby-openai", "~> 7.4"
-gem "langchainrb_rails", "~> 0.1.12"
-gem "langchainrb", "~> 0.16.1"
+# gem "langchainrb_rails", "~> 0.1.12"
+gem "langchainrb", "~> 0.19.4"
 gem "qdrant-ruby", "~> 0.9.8"
 
 # Markdown

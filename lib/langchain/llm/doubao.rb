@@ -20,8 +20,8 @@ module Langchain
       DEFAULTS = {
         n: 1,
         temperature: 0.0,
-        chat_completion_model_name: "doubao-pro-256k",
-        embeddings_model_name: "doubao-embeddings"
+        chat_model: "doubao-pro-256k",
+        embedding_model: "doubao-embeddings"
       }.freeze
 
       EMBEDDING_SIZES = {
