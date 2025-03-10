@@ -5,6 +5,11 @@ class AssistantsController < ApplicationController
     @assistant = current_user.assistants.build(assistant_params)
 
     if @assistant.save
+      Current.user.update!(last_used_assistant: @assistant)
+      @assistant.conversations.create(
+        title: "新对话 #{Time.current.strftime('%Y-%m-%d %H:%M')}",
+        user: current_user
+      )
       redirect_to ai_chats_path, notice: "助手创建成功"
     else
       raise StandardError.new("助手创建失败")
