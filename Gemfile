@@ -79,7 +79,7 @@ gem "langchainrb", "~> 0.19.4"
 gem "qdrant-ruby", "~> 0.9.8"
 
 # Markdown
-gem "redcarpet", "~> 3.6.0"
+gem "redcarpet", "~> 3.6.1"
 
 # Calculator
 gem "eqn", "~> 1.6"
