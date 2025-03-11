@@ -14,6 +14,7 @@ class AiChatsController < ApplicationController
 
     if params[:conversation_id].present?
       @current_conversation = @current_assistant.conversations.find_by(id: params[:conversation_id])
+      @current_conversation.touch if @current_conversation
     else
       if @current_assistant.present?
         conversation = @current_assistant.conversations.ordered.first
