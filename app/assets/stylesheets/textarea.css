@@ -1,0 +1,35 @@
+/* 替代方案：自定义文本区域拉伸方向 - 向上拉升 */
+.resize-upward {
+    position: relative;
+    overflow: hidden;
+    min-height: 50px;
+    /* 确保最小高度 */
+}
+
+.resize-upward textarea {
+    resize: none;
+    /* 禁用默认拉伸 */
+    overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 3rem !important;
+    /* 为按钮留出空间 */
+    min-height: 50px !important;
+    line-height: 1.5;
+}
+
+/* 自定义拉伸手柄 */
+.resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    cursor: row-resize;
+    background-color: transparent;
+    z-index: 10;
+}
+
+.resize-handle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}

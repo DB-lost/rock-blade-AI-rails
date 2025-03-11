@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get "registrations/index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -27,4 +26,15 @@ Rails.application.routes.draw do
     end
   end
   get "sign_up" => "registrations#new", as: :sign_up
+
+  get "ai_chats" => "ai_chats#index"
+
+  # 助手相关路由
+  resources :assistants, only: [ :create, :update, :destroy ] do
+    member do
+      post :set_last_used  # 设置最后使用的助手
+    end
+    resources :conversations, only: [ :create, :update, :destroy ]
+  end
+  resources :messages, only: [ :create ]
 end

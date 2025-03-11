@@ -1,0 +1,200 @@
+<% content_for :head do %>
+  <%= tag.meta name: "last-used-assistant-id", content: @current_assistant&.id %>
+<% end %>
+<div class="h-full flex bg-background" data-controller="chat">
+  <!-- 主要内容区域 -->
+  <div class="flex-1 flex flex-col">
+    <!-- 对话展示区域 - 只有这里可以滚动 -->
+    <div class="flex-1 overflow-y-auto" data-chat-target="container">
+      <div id="conversation_messages" class="p-6 space-y-6">
+        <% if @current_assistant.present? %>
+          <% if @current_conversation.present? %>
+            <%= turbo_stream_from "conversation_#{@current_conversation.id}" %>
+            <% if @current_conversation&.messages&.any? %>
+              <% @current_conversation.messages.ordered.each do |message| %>
+                <%= render partial: "messages/#{message.role}_message", locals: { message: message } %>
+              <% end %>
+            <% else %>
+              <div class="text-center text-muted-foreground p-4">
+                开始新的对话...
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-center text-muted-foreground p-4">
+              开始新的对话...
+            </div>
+          <% end %>
+        <% else %>
+          <div class="flex flex-col items-center justify-center h-full text-center p-6">
+            <div class="mb-6">
+              <%= lucide_icon "user-plus", class: "w-16 h-16 text-muted-foreground" %>
+            </div>
+            <h2 class="text-xl font-bold mb-2">还没有创建助手</h2>
+            <p class="text-muted-foreground mb-6">请创建一个新的助手开始对话</p>
+            <%= render_dialog do %>
+              <%= dialog_trigger do %>
+                <%= render_button class: "flex items-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90" do %>
+                  <%= lucide_icon "plus", class: "w-4 h-4" %>
+                  <span>创建新助手</span>
+                <% end %>
+              <% end %>
+              <%= dialog_content do %>
+                <%= render "ai_chats/assistants/form", assistant: nil %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- 固定底部编辑工具栏 - 仅在选中助手时显示 -->
+    <% if @current_assistant.present? %>
+      <div class="flex-shrink-0 border-t border-border bg-background p-4">
+        <div class="flex items-center space-x-4" data-controller="tools">
+          <div class="flex items-center space-x-2 border-r border-border pr-4">
+            <%= render_tooltip do %>
+              <%= tooltip_trigger do %>
+                <%= render_button variant: :ghost,
+                      class: "tool-button",
+                      data: {
+                        tools_target: "button",
+                        action: "click->tools#toggle",
+                        tool_type: "network",
+                        state: "unselected"
+                      } do %>
+                  <%= lucide_icon "globe", class: "w-5 h-5" %>
+                <% end %>
+              <% end %>
+              <%= tooltip_content class: "bg-background border border-border shadow-md" do %>
+                <div class="grid gap-2">
+                  <div class="space-y-2">
+                    <p class="text-sm text-muted-foreground">联网搜索</p>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+            <%= render_tooltip do %>
+              <%= tooltip_trigger do %>
+                <%= render_button variant: :ghost,
+                      class: "tool-button",
+                      data: {
+                        tools_target: "button",
+                        action: "click->tools#toggle",
+                        tool_type: "knowledge",
+                        state: "unselected"
+                      } do %>
+                  <%= lucide_icon "book-open", class: "w-5 h-5" %>
+                <% end %>
+              <% end %>
+              <%= tooltip_content class: "bg-background border border-border shadow-md" do %>
+                <div class="grid gap-2">
+                  <div class="space-y-2">
+                    <p class="text-sm text-muted-foreground">知识库</p>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="flex-1">
+            <%= turbo_frame_tag "new_message_form" do %>
+              <%= render_form_for(Message.new, class: "w-full", data: { controller: "autosubmit" }) do |form| %>
+                <%= turbo_frame_tag "error_messages" do %>
+                  <%= render "shared/error_messages", errors: @current_conversation.errors if @current_conversation&.errors&.any? %>
+                <% end %>
+                <%= form.hidden_field :conversation_id, value: @current_conversation&.id %>
+                <%= form.hidden_field :selected_tools, data: { tools_target: "selectedTools" } %>
+                <div class="relative">
+                  <!-- 文本区域 -->
+                  <div class="resize-upward w-full">
+                    <div class="resize-handle" data-controller="resize"></div>
+                    <%= form.text_area :content, 
+                      class: "w-full bg-muted rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-ring pr-12",
+                      placeholder: "输入消息...", 
+                      rows: 2,
+                      data: {
+                        chat_target: "input",
+                        action: "keydown->chat#checkSubmit input->chat#adjustHeight",
+                        resize_target: "textarea",
+                        autosubmit_target: "input"
+                      } 
+                    %>
+                  </div>
+                  
+                  <!-- 发送按钮 - 完全独立于resize-upward -->
+                  <%= button_tag type: "submit", 
+                    class: "absolute right-3 bottom-3 p-2 hover:bg-muted rounded",
+                    data: { 
+                      action: "click->autosubmit#submit",
+                      autosubmit_target: "submit" 
+                    } do %>
+                    <%= lucide_icon "send", class: "w-5 h-5" %>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 固定右侧边栏 -->
+  <% if @current_assistant.present? %>
+    <div class="w-64 bg-muted/50 border-l border-border flex flex-col flex-shrink-0" data-controller="ui--tab-buttons">
+      <!-- 标签页头部 -->
+      <div class="flex border-b border-border">
+        <button class="flex-1 p-3 text-center font-medium border-b-2 border-primary" 
+                data-ui--tab-buttons-target="tab" 
+                data-tab-id="assistants" 
+                data-action="click->ui--tab-buttons#switchTab">
+          AI 助手
+        </button>
+        <button class="flex-1 p-3 text-center font-medium border-b-2 border-transparent text-muted-foreground" 
+                data-ui--tab-buttons-target="tab" 
+                data-tab-id="conversations" 
+                data-action="click->ui--tab-buttons#switchTab">
+          对话
+        </button>
+      </div>
+      
+      <!-- 标签页内容 -->
+      <div class="flex-1 overflow-y-auto" data-ui--tab-buttons-target="content" data-content-id="assistants">
+        <%= render "ai_chats/assistants/assistants" %>
+      </div>
+      
+      <div class="flex-1 overflow-y-auto hidden" data-ui--tab-buttons-target="content" data-content-id="conversations">
+        <%= render "ai_chats/conversations/conversations" %>
+      </div>
+      
+      <!-- 底部按钮区域 -->
+      <div class="p-4 border-t border-border" data-ui--tab-buttons-target="footer" data-footer-id="assistants">
+        <%= render_dialog do %>
+          <%= dialog_trigger do %>
+            <%= render_button class: "w-full flex items-center justify-center space-x-2 p-2 bg-primary text-primary-foreground rounded hover:bg-primary/90" do %>
+              <%= lucide_icon "plus", class: "w-4 h-4" %>
+              <span>添加助手</span>
+            <% end %>
+          <% end %>
+          <%= dialog_content do %>
+            <%= render "ai_chats/assistants/form", assistant: nil %>
+          <% end %>
+        <% end %>
+      </div>
+      
+      <div class="p-4 border-t border-border hidden" data-ui--tab-buttons-target="footer" data-footer-id="conversations">
+        <%= render_dialog do %>
+          <%= dialog_trigger do %>
+            <%= render_button class: "w-full flex items-center justify-center space-x-2 p-2 bg-primary text-primary-foreground rounded hover:bg-primary/90" do %>
+              <%= lucide_icon "plus", class: "w-4 h-4" %>
+              <span>添加对话</span>
+            <% end %>
+          <% end %>
+          <%= dialog_content do %>
+            <%= render "ai_chats/conversations/form", conversation: nil %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+</div>

@@ -10,7 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_01_040052) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_07_032425) do
+  create_table "assistants", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "instructions"
+    t.string "tool_choice"
+    t.json "tools"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_assistants_on_user_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.string "title", null: false
+    t.integer "assistant_id", null: false
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assistant_id"], name: "index_conversations_on_assistant_id"
+    t.index ["user_id"], name: "index_conversations_on_user_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.string "role"
+    t.text "content"
+    t.json "tool_calls"
+    t.string "tool_call_id"
+    t.integer "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+  end
+
+  create_table "prompts", force: :cascade do |t|
+    t.text "template", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -18,6 +56,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_01_040052) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "tool_usages", force: :cascade do |t|
+    t.string "function_name"
+    t.json "arguments"
+    t.text "result"
+    t.string "status"
+    t.integer "message_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id"], name: "index_tool_usages_on_message_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -29,10 +78,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_01_040052) do
     t.date "birthday"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "last_used_assistant_id"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
+    t.index ["last_used_assistant_id"], name: "index_users_on_last_used_assistant_id"
     t.index ["phone"], name: "index_users_on_phone", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "assistants", "users"
+  add_foreign_key "conversations", "assistants"
+  add_foreign_key "conversations", "users"
+  add_foreign_key "messages", "conversations"
   add_foreign_key "sessions", "users"
+  add_foreign_key "tool_usages", "messages"
+  add_foreign_key "users", "assistants", column: "last_used_assistant_id"
 end

@@ -1,0 +1,12 @@
+<div id="<%= dom_id(message) %>" class="flex items-start space-x-4 justify-end">
+  <div class="flex-1 bg-primary rounded-lg p-4">
+    <div class="text-primary-foreground">
+      <% if defined?(markdown?) && markdown?(message.content) %>
+        <%= markdown(message.content) %>
+      <% else %>
+        <%= message.content %>
+      <% end %>
+    </div>
+  </div>
+  <%= lucide_icon "user", class: "w-6 h-6 mt-1 flex-shrink-0 text-muted-foreground" %>
+</div>

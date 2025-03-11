@@ -1,0 +1,55 @@
+/* 消息加载动画样式 */
+.assistant-typing {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background-color: currentColor;
+    border-radius: 50%;
+    animation: typing 1.5s infinite ease-in-out;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes typing {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* 消息内容样式 */
+.markdown-content {
+    word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.5;
+}
+
+.markdown-content code {
+    font-family: monospace;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.markdown-content pre {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+}

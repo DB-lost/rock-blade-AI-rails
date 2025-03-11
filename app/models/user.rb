@@ -2,6 +2,9 @@ class User < ApplicationRecord
   attr_accessor :verification_code
   has_secure_password
   has_many :sessions, dependent: :destroy
+  has_many :assistants, dependent: :destroy
+  has_many :conversations, dependent: :destroy
+  belongs_to :last_used_assistant, class_name: "Assistant", optional: true
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   normalizes :phone, with: ->(p) { p&.gsub(/\D/, "") }
