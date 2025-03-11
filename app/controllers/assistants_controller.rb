@@ -12,20 +12,16 @@ class AssistantsController < ApplicationController
       )
       redirect_to ai_chats_path, notice: "助手创建成功"
     else
-      raise StandardError.new("助手创建失败")
+      redirect_to ai_chats_path, error: "助手创建失败"
     end
-  rescue StandardError => e
-    handle_error(e)
   end
 
   def update
     if @assistant.update(assistant_params)
       redirect_to ai_chats_path, notice: "助手更新成功"
     else
-      raise StandardError.new("助手更新失败")
+      redirect_to ai_chats_path, error: "助手更新失败"
     end
-  rescue StandardError => e
-    handle_error(e)
   end
 
   def destroy
@@ -38,10 +34,11 @@ class AssistantsController < ApplicationController
         format.json { head :ok }
       end
     else
-      raise StandardError.new("助手删除失败")
+      respond_to do |format|
+        format.html { redirect_to ai_chats_path, error: "助手删除失败" }
+        format.json { head :ok }
+      end
     end
-  rescue StandardError => e
-    handle_error(e)
   end
 
   # 设置最后使用的助手

@@ -12,19 +12,22 @@ class AiChatsController < ApplicationController
       @current_assistant = current_user.last_used_assistant
     end
 
-    # 如果选择了助手，检查是否有对话，没有则创建，有则获取最后一个
-    if @current_assistant.present?
-      conversation = @current_assistant.conversations.ordered.first
-      if conversation.nil?
-        # 创建新对话
-        conversation = @current_assistant.conversations.create(
-          title: "新对话 #{Time.current.strftime('%Y-%m-%d %H:%M')}",
-          user: current_user
-        )
+    if params[:conversation_id].present?
+      @current_conversation = @current_assistant.conversations.find_by(id: params[:conversation_id])
+    else
+      if @current_assistant.present?
+        conversation = @current_assistant.conversations.ordered.first
+        if conversation.nil?
+          # 创建新对话
+          conversation = @current_assistant.conversations.create(
+            title: "新对话 #{Time.current.strftime('%Y-%m-%d %H:%M')}",
+            user: current_user
+          )
+        end
+        @current_conversation = conversation
       end
-      @current_conversation = conversation
-      @conversations = @current_assistant.conversations.order(updated_at: :desc)
     end
+    @conversations = @current_assistant.conversations.order(updated_at: :desc)
   end
 
   private
