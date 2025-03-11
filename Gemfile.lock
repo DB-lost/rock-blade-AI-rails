@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/patterns-ai-core/langchainrb_rails.git
+  revision: 8bda66d2f3c23b491e6f3465cca2c0c3e4b6d42f
+  specs:
+    langchainrb_rails (0.1.12)
+      langchainrb (>= 0.19)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -415,6 +422,7 @@ DEPENDENCIES
   jbuilder
   kamal
   langchainrb (~> 0.19.4)
+  langchainrb_rails!
   lucide-rails (~> 0.5.1)
   propshaft
   puma (>= 5.0)

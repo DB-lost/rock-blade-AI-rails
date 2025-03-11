@@ -74,7 +74,7 @@ gem "lucide-rails", "~> 0.5.1"
 
 # AI
 gem "ruby-openai", "~> 7.4"
-# gem "langchainrb_rails", "~> 0.1.12"
+gem "langchainrb_rails", git: "https://github.com/patterns-ai-core/langchainrb_rails.git"
 gem "langchainrb", "~> 0.19.4"
 gem "qdrant-ruby", "~> 0.9.8"
 
