@@ -1,4 +1,5 @@
 class KnowledgeBasesController < ApplicationController
+  before_action :set_chat_breadcrumbs
   before_action :set_knowledge_base, only: [ :show, :edit, :update, :destroy ]
 
   def index
@@ -63,7 +64,6 @@ class KnowledgeBasesController < ApplicationController
   end
 
   def set_chat_breadcrumbs
-    set_default_breadcrumb
     add_breadcrumb "Knowledge Bases", knowledge_bases_path
   end
 end

@@ -36,7 +36,6 @@ class AiChatsController < ApplicationController
   private
 
   def set_chat_breadcrumbs
-    set_default_breadcrumb
     add_breadcrumb "AI Chats", ai_chats_path
   end
 end
