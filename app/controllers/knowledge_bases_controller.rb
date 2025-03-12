@@ -8,9 +8,6 @@ class KnowledgeBasesController < ApplicationController
     if params[:query].present?
       @knowledge_bases = @knowledge_bases.search(params[:query])
     end
-
-    # 分页
-    @knowledge_bases = @knowledge_bases.page(params[:page]).per(10)
   end
 
   def show

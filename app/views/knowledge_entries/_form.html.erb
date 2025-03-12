@@ -1,0 +1,40 @@
+<%= render_form_for([knowledge_base, knowledge_entry], class: "w-full pt-4 pr-8") do |form| %>
+  <div class="grid grid-cols-3 items-baseline mb-4">
+    <%= form.label :title, class: "text-right mr-4 text-lg" %>
+    <%= form.text_field :title, required: true, class: "col-span-2" %>
+  </div>
+  
+  <%= form.hidden_field :source_type %>
+  
+  <% if knowledge_entry.url? %>
+    <div class="grid grid-cols-3 items-baseline mb-4">
+      <%= form.label :source_url, class: "text-right mr-4 text-lg" %>
+      <%= form.url_field :source_url, required: true, class: "col-span-2" %>
+    </div>
+  <% end %>
+  
+  <% if knowledge_entry.note? %>
+    <div class="grid grid-cols-3 items-baseline">
+      <%= form.label :content, class: "text-right mr-4 text-lg" %>
+      <%= form.text_area :content, required: true, class: "col-span-2 mb-8", rows: 8 %>
+    </div>
+  <% end %>
+  
+  <% if knowledge_entry.file? && knowledge_entry.file.attached? %>
+    <div class="grid grid-cols-3 items-baseline mb-4">
+      <%= form.label :file, class: "text-right mr-4 text-lg" %>
+      <div class="col-span-2">
+        <div class="flex items-center p-3 bg-muted rounded-md">
+          <%= lucide_icon "file", class: "w-5 h-5 mr-2 text-muted-foreground" %>
+          <span class="flex-1 truncate"><%= knowledge_entry.file.filename %></span>
+          <span class="ml-2 text-sm text-muted-foreground"><%= number_to_human_size(knowledge_entry.file.byte_size) %></span>
+        </div>
+        <p class="text-sm text-muted-foreground mt-2">如需更换文件，请删除此条目并重新上传</p>
+      </div>
+    </div>
+  <% end %>
+  
+  <div class="flex justify-center">
+    <%= form.submit "更新知识条目", class: "mr-2" %>
+  </div>
+<% end %> 

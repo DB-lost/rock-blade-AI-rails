@@ -1,0 +1,97 @@
+<div class="container mx-auto p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">我的知识库</h1>
+    <%= render_dialog do %>
+      <%= dialog_trigger do %>
+        <%= render_button class: "flex items-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90" do %>
+          <%= lucide_icon "plus", class: "w-4 h-4" %>
+          <span>创建知识库</span>
+        <% end %>
+      <% end %>
+      <%= dialog_content do %>
+        <%= render "form", knowledge_base: KnowledgeBase.new %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- 搜索框 -->
+  <div class="mb-6">
+    <%= form_with url: knowledge_bases_path, method: :get, class: "flex" do |form| %>
+      <%= form.text_field :query, 
+                         placeholder: "搜索知识库...", 
+                         value: params[:query], 
+                         class: "flex-1 px-4 py-2 border border-border rounded-l-md focus:outline-none focus:ring-2 focus:ring-ring" %>
+      <%= form.button type: :submit, class: "px-4 py-2 bg-primary text-primary-foreground rounded-r-md hover:bg-primary/90" do %>
+        <%= lucide_icon "search", class: "w-4 h-4" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if @knowledge_bases.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <% @knowledge_bases.each do |knowledge_base| %>
+        <div class="border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+          <div class="p-4 bg-muted/50">
+            <div class="flex justify-between items-start">
+              <h2 class="text-xl font-semibold truncate"><%= knowledge_base.name %></h2>
+              <div class="flex space-x-2">
+                <%= render_dialog do %>
+                  <%= dialog_trigger do %>
+                    <%= render_button variant: :ghost, size: :sm, class: "p-1" do %>
+                      <%= lucide_icon "edit", class: "w-4 h-4" %>
+                    <% end %>
+                  <% end %>
+                  <%= dialog_content do %>
+                    <%= render "form", knowledge_base: knowledge_base %>
+                  <% end %>
+                <% end %>
+                <%= button_to knowledge_base_path(knowledge_base), 
+                            method: :delete, 
+                            form: { data: { turbo_confirm: "确定要删除这个知识库吗？" } },
+                            class: "p-1 text-destructive hover:bg-destructive/10 rounded" do %>
+                  <%= lucide_icon "trash-2", class: "w-4 h-4" %>
+                <% end %>
+              </div>
+            </div>
+            <p class="text-muted-foreground text-sm mt-2 line-clamp-2">
+              <%= knowledge_base.description.presence || "暂无描述" %>
+            </p>
+          </div>
+          <div class="p-4 flex justify-between items-center">
+            <div class="text-sm text-muted-foreground">
+              <%= pluralize(knowledge_base.knowledge_entries.count, "条目") %>
+            </div>
+            <%= link_to knowledge_base_path(knowledge_base), class: "text-primary hover:underline text-sm flex items-center" do %>
+              <span>查看详情</span>
+              <%= lucide_icon "chevron-right", class: "w-4 h-4 ml-1" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="mt-6">
+      <%== pagy_nav(@pagy) if defined?(@pagy) %>
+    </div>
+  <% else %>
+    <div class="flex flex-col items-center justify-center py-12 text-center">
+      <div class="mb-6">
+        <%= lucide_icon "book", class: "w-16 h-16 text-muted-foreground" %>
+      </div>
+      <h2 class="text-xl font-bold mb-2">还没有创建知识库</h2>
+      <p class="text-muted-foreground mb-6">创建一个知识库来存储和管理您的知识资源</p>
+      <%= render_dialog do %>
+        <%= dialog_trigger do %>
+          <%= render_button class: "flex items-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90" do %>
+            <%= lucide_icon "plus", class: "w-4 h-4" %>
+            <span>创建第一个知识库</span>
+          <% end %>
+        <% end %>
+        <%= dialog_content do %>
+          <%= render "form", knowledge_base: KnowledgeBase.new %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div> 

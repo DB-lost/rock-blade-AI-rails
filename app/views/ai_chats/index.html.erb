@@ -103,6 +103,7 @@
                 <% end %>
                 <%= form.hidden_field :conversation_id, value: @current_conversation&.id %>
                 <%= form.hidden_field :selected_tools, data: { tools_target: "selectedTools" } %>
+                <%= form.hidden_field :selected_knowledge_bases, value: "[]" %>
                 <div class="relative">
                   <!-- 文本区域 -->
                   <div class="resize-upward w-full">
@@ -198,3 +199,6 @@
   <% end %>
 
 </div>
+
+<!-- 知识库选择器 -->
+<%= render "knowledge_base_selector" %>

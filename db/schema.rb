@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_07_032425) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_12_000002) do
   create_table "assistants", force: :cascade do |t|
     t.string "title", null: false
     t.string "instructions"
@@ -30,6 +30,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_032425) do
     t.datetime "updated_at", null: false
     t.index ["assistant_id"], name: "index_conversations_on_assistant_id"
     t.index ["user_id"], name: "index_conversations_on_user_id"
+  end
+
+  create_table "knowledge_bases", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_knowledge_bases_on_name"
+    t.index ["user_id"], name: "index_knowledge_bases_on_user_id"
+  end
+
+  create_table "knowledge_entries", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "content"
+    t.integer "source_type", default: 0, null: false
+    t.string "source_url"
+    t.integer "knowledge_base_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["knowledge_base_id"], name: "index_knowledge_entries_on_knowledge_base_id"
+    t.index ["source_type"], name: "index_knowledge_entries_on_source_type"
+    t.index ["title"], name: "index_knowledge_entries_on_title"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -88,6 +111,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_032425) do
   add_foreign_key "assistants", "users"
   add_foreign_key "conversations", "assistants"
   add_foreign_key "conversations", "users"
+  add_foreign_key "knowledge_bases", "users"
+  add_foreign_key "knowledge_entries", "knowledge_bases"
   add_foreign_key "messages", "conversations"
   add_foreign_key "sessions", "users"
   add_foreign_key "tool_usages", "messages"
