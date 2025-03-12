@@ -19,7 +19,7 @@
             </div>
             <div class="p-6 text-center text-muted-foreground border-2 border-dashed border-border rounded-lg mx-4 mb-4" data-controller="file-upload">
               <div data-file-upload-target="dropzone" class="cursor-pointer">
-                <%= form_with url: upload_file_knowledge_base_knowledge_entries_path(@current_knowledge_base), 
+                <%= render_form_with url: upload_file_knowledge_base_knowledge_entries_path(@current_knowledge_base), 
                             method: :post, 
                             multipart: true,
                             data: { file_upload_target: "form" } do |form| %>
@@ -79,7 +79,7 @@
                   <% end %>
                 <% end %>
                 <%= dialog_content do %>
-                  
+
                 <% end %>
               <% end %>
             </div>

@@ -7,9 +7,10 @@ class KnowledgeEntry < ApplicationRecord
 
   # 枚举类型
   enum source_type: {
-    file: 0,
-    url: 1,
-    note: 2
+    directory: 0,   # 本地目录
+    url: 1,        # 单个网页
+    sitemap: 2,    # 站点地图
+    note: 3
   }
 
   # 验证

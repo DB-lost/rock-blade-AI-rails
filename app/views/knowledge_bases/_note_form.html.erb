@@ -6,11 +6,11 @@
   </div>
 
   <%= render_form_for([@current_knowledge_base, KnowledgeEntry.new], class: "space-y-4") do |form| %>
-    <%= form.hidden_field :entry_type, value: "note" %>
+    <%= form.hidden_field :source_type, value: :note %>
 
     <div class="grid grid-cols-3 items-baseline mb-4">
-      <%= form.label :name, class: "text-right mr-4 text-lg" %>
-      <%= form.text_field :name, 
+      <%= form.label :title, class: "text-right mr-4 text-lg" %>
+      <%= form.text_field :title, 
           required: true,
           placeholder: "输入笔记标题",
           class: "col-span-2" %>
