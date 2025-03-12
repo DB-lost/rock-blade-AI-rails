@@ -13,6 +13,14 @@ class KnowledgeBasesController < ApplicationController
     # 设置当前选中的知识库
     if params[:kb_id].present?
       @current_knowledge_base = @knowledge_bases.find_by(id: params[:kb_id])
+      if @current_knowledge_base
+        # 获取并按类型分组知识条目
+        @knowledge_entries = @current_knowledge_base.knowledge_entries.order(created_at: :desc)
+        @files = @knowledge_entries.select { |entry| entry.source_type == "file" }
+        @directories = @knowledge_entries.select { |entry| entry.source_type == "directory" }
+        @urls = @knowledge_entries.select { |entry| entry.source_type == "url" }
+        @notes = @knowledge_entries.select { |entry| entry.source_type == "note" }
+      end
     end
   end
 

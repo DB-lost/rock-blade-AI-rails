@@ -16,8 +16,41 @@
             <%= render_dropzone(
               upload_url: upload_file_knowledge_base_knowledge_entries_path(@current_knowledge_base),
               file_param_name: "knowledge_entry[file]",
-              redirect_url: knowledge_base_path(@current_knowledge_base)
+              redirect_url: knowledge_bases_path(kb_id: @current_knowledge_base.id)
             ) %>
+            
+            <!-- 文件列表 -->
+            <% if @files.present? %>
+              <div class="divide-y divide-border">
+                <% @files.each do |entry| %>
+                  <div class="flex items-center justify-between p-4 hover:bg-muted/50">
+                    <div class="flex items-center space-x-2">
+                      <%= lucide_icon "file", class: "w-4 h-4 text-muted-foreground" %>
+                      <span class="font-medium"><%= entry.title %></span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <%= link_to rails_blob_path(entry.file, disposition: "attachment"), 
+                          class: "inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-foreground",
+                          title: "下载文件" do %>
+                        <%= lucide_icon "download", class: "w-4 h-4" %>
+                      <% end %>
+                      <%= button_to knowledge_base_knowledge_entry_path(@current_knowledge_base, entry),
+                          method: :delete,
+                          class: "inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-destructive",
+                          form: { class: "inline-flex" },
+                          form: { data: { turbo_confirm: "确定要删除这个文件吗？" } },
+                          title: "删除文件" do %>
+                        <%= lucide_icon "trash", class: "w-4 h-4" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="p-6 text-center text-muted-foreground">
+                还没有上传文件
+              </div>
+            <% end %>
           </div>
 
           <!-- 目录区域 -->
@@ -39,9 +72,32 @@
                 <% end %>
               <% end %>
             </div>
-            <div class="p-6 text-center text-muted-foreground">
-              还没有添加目录
-            </div>
+            <!-- 目录列表 -->
+            <% if @directories.present? %>
+              <div class="divide-y divide-border">
+                <% @directories.each do |entry| %>
+                  <div class="flex items-center justify-between p-4 hover:bg-muted/50">
+                    <div class="flex items-center space-x-2">
+                      <%= lucide_icon "folder", class: "w-4 h-4 text-muted-foreground" %>
+                      <span class="font-medium"><%= entry.title %></span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <%= button_to knowledge_base_knowledge_entry_path(@current_knowledge_base, entry),
+                          method: :delete,
+                          class: "text-muted-foreground hover:text-destructive",
+                          form: { data: { turbo_confirm: "确定要删除这个目录吗？" } },
+                          title: "删除目录" do %>
+                        <%= lucide_icon "trash", class: "w-4 h-4" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="p-6 text-center text-muted-foreground">
+                还没有添加目录
+              </div>
+            <% end %>
           </div>
 
           <!-- 网址区域 -->
@@ -63,9 +119,37 @@
                 <% end %>
               <% end %>
             </div>
-            <div class="p-6 text-center text-muted-foreground">
-              还没有添加网址
-            </div>
+            <!-- URL列表 -->
+            <% if @urls.present? %>
+              <div class="divide-y divide-border">
+                <% @urls.each do |entry| %>
+                  <div class="flex items-center justify-between p-4 hover:bg-muted/50">
+                    <div class="flex items-center space-x-2">
+                      <%= lucide_icon "link", class: "w-4 h-4 text-muted-foreground" %>
+                      <div class="flex flex-col">
+                        <span class="font-medium"><%= entry.title %></span>
+                        <a href="<%= entry.source_url %>" target="_blank" class="text-sm text-muted-foreground hover:text-foreground">
+                          <%= entry.source_url %>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <%= button_to knowledge_base_knowledge_entry_path(@current_knowledge_base, entry),
+                          method: :delete,
+                          class: "text-muted-foreground hover:text-destructive",
+                          form: { data: { turbo_confirm: "确定要删除这个网址吗？" } },
+                          title: "删除网址" do %>
+                        <%= lucide_icon "trash", class: "w-4 h-4" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="p-6 text-center text-muted-foreground">
+                还没有添加网址
+              </div>
+            <% end %>
           </div>
 
           <!-- 笔记区域 -->
@@ -87,9 +171,37 @@
                 <% end %>
               <% end %>
             </div>
-            <div class="p-6 text-center text-muted-foreground">
-              还没有添加笔记
-            </div>
+            <!-- 笔记列表 -->
+            <% if @notes.present? %>
+              <div class="divide-y divide-border">
+                <% @notes.each do |entry| %>
+                  <div class="flex items-center justify-between p-4 hover:bg-muted/50">
+                    <div class="flex items-center space-x-2">
+                      <%= lucide_icon "file-text", class: "w-4 h-4 text-muted-foreground" %>
+                      <div class="flex flex-col">
+                        <span class="font-medium"><%= entry.title %></span>
+                        <span class="text-sm text-muted-foreground">
+                          <%= truncate(entry.content, length: 100) %>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <%= button_to knowledge_base_knowledge_entry_path(@current_knowledge_base, entry),
+                          method: :delete,
+                          class: "text-muted-foreground hover:text-destructive",
+                          form: { data: { turbo_confirm: "确定要删除这个笔记吗？" } },
+                          title: "删除笔记" do %>
+                        <%= lucide_icon "trash", class: "w-4 h-4" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="p-6 text-center text-muted-foreground">
+                还没有添加笔记
+              </div>
+            <% end %>
           </div>
         </div>
       </div>

@@ -34,22 +34,22 @@ class KnowledgeEntriesController < ApplicationController
     @knowledge_entry.file.attach(file_params[:file])
 
     respond_to do |format|
-      format.html do
-        if @knowledge_entry.save
+      if @knowledge_entry.save
+        format.html do
           redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "文件上传成功。"
-        else
-          redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), alert: "文件上传失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
         end
-      end
-
-      format.json do
-        if @knowledge_entry.save
+        format.json do
           render json: {
             success: true,
             message: "文件上传成功",
             redirect_url: knowledge_bases_path(kb_id: @knowledge_base.id)
           }
-        else
+        end
+      else
+        format.html do
+          redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), alert: "文件上传失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
+        end
+        format.json do
           render json: {
             success: false,
             message: "文件上传失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
