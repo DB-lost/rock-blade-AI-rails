@@ -2,10 +2,6 @@
 
 class VectorSearchService
   class << self
-    def search_knowledge_entries(query, limit: 5)
-      KnowledgeEntry.search_by_embedding(query, limit: limit)
-    end
-
     def search_in_knowledge_base(knowledge_base_id, query, limit: 5)
       entries = KnowledgeEntry.search_by_embedding(
         query,
@@ -26,10 +22,9 @@ class VectorSearchService
 
     def reindex_all
       KnowledgeEntry.reindex
-    end
-
-    def update_entry_vectors(entry)
-      entry.update_vector_embeddings
+    rescue => e
+      Rails.logger.error "Error reindexing vectors: #{e.message}"
+      false
     end
   end
 end

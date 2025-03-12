@@ -1,7 +1,5 @@
 class KnowledgeEntry < ApplicationRecord
-  vectorsearch
-
-  after_save :upsert_to_vectorsearch
+  include LangchainrbRails::Vectorizable
 
   # 关联
   belongs_to :knowledge_base
@@ -37,8 +35,6 @@ class KnowledgeEntry < ApplicationRecord
 
   # 处理文件内容提取
   after_create :extract_content_from_file, if: -> { file? && file.attached? }
-  after_commit :update_vector_embeddings, if: :saved_change_to_content?
-
   def process_for_embeddings
     {
       title: title,
