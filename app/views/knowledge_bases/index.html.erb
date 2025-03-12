@@ -13,7 +13,11 @@
                 文件
               </h2>
             </div>
-            <%= render_dropzone %>
+            <%= render_dropzone(
+              upload_url: upload_file_knowledge_base_knowledge_entries_path(@current_knowledge_base),
+              file_param_name: "knowledge_entry[file]",
+              redirect_url: knowledge_base_path(@current_knowledge_base)
+            ) %>
           </div>
 
           <!-- 目录区域 -->

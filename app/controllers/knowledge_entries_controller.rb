@@ -34,9 +34,16 @@ class KnowledgeEntriesController < ApplicationController
     @knowledge_entry.file.attach(file_params[:file])
 
     if @knowledge_entry.save
-      redirect_to @knowledge_base, notice: "文件上传成功。"
+      render json: {
+        success: true,
+        message: "文件上传成功",
+        redirect_url: knowledge_base_path(@knowledge_base)
+      }
     else
-      redirect_to @knowledge_base, alert: "文件上传失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
+      render json: {
+        success: false,
+        message: "文件上传失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
+      }
     end
   end
 
