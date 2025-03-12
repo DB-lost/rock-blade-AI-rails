@@ -1,17 +1,21 @@
 <%= render_form_for(knowledge_base, class: "w-full pt-4 pr-8") do |form| %>
-  <div class="grid grid-cols-3 items-baseline mb-4">
-    <%= form.label :name, class: "text-right mr-4 text-lg" %>
-    <%= form.text_field :name, required: true, class: "col-span-2" %>
+  <div class="space-y-4">
+    <div>
+      <%= form.label :name, class: "block text-sm font-medium mb-1" %>
+      <%= form.text_field :name, required: true, class: "w-full" %>
+    </div>
+    
+    <div>
+      <%= form.label :description, class: "block text-sm font-medium mb-1" %>
+      <%= form.text_area :description, rows: 4, class: "w-full" %>
+    </div>
   </div>
-  <div class="grid grid-cols-3 items-baseline">
-    <%= form.label :description, class: "text-right mr-4 text-lg" %>
-    <%= form.text_area :description, class: "col-span-2 mb-8", rows: 4 %>
-  </div>
-  <div class="flex justify-center">
+
+  <div class="flex justify-end mt-6">
     <% if knowledge_base.persisted? %>
-      <%= form.submit "更新知识库", class: "mr-2" %>
+      <%= form.submit "更新知识库", class: "bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90" %>
     <% else %>
-      <%= form.submit "创建知识库", class: "mr-2" %>
+      <%= form.submit "创建知识库", class: "bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90" %>
     <% end %>
   </div>
 <% end %> 
