@@ -1,6 +1,6 @@
 class KnowledgeBasesController < ApplicationController
   before_action :set_chat_breadcrumbs
-  before_action :set_knowledge_base, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_knowledge_base, only: [ :update, :destroy ]
 
   def index
     @knowledge_bases = current_user.knowledge_bases.order(created_at: :desc)
@@ -16,38 +16,19 @@ class KnowledgeBasesController < ApplicationController
     end
   end
 
-  def show
-    @knowledge_entries = @knowledge_base.knowledge_entries.ordered
-
-    # 搜索功能
-    if params[:query].present?
-      @knowledge_entries = @knowledge_entries.search(params[:query])
-    end
-
-    # 分页
-    @knowledge_entries = @knowledge_entries.page(params[:page]).per(20)
-  end
-
-  def new
-    @knowledge_base = current_user.knowledge_bases.new
-  end
-
   def create
     @knowledge_base = current_user.knowledge_bases.new(knowledge_base_params)
 
     if @knowledge_base.save
-      redirect_to @knowledge_base, notice: "知识库创建成功。"
+      redirect_to knowledge_bases_path, notice: "知识库创建成功。"
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  def edit
-  end
-
   def update
     if @knowledge_base.update(knowledge_base_params)
-      redirect_to @knowledge_base, notice: "知识库更新成功。"
+      redirect_to knowledge_bases_path, notice: "知识库更新成功。"
     else
       render :edit, status: :unprocessable_entity
     end
