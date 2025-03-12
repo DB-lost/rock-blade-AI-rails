@@ -5,14 +5,6 @@ class KnowledgeEntry < ApplicationRecord
   # 文件附件
   has_one_attached :file
 
-  # 枚举类型
-  enum source_type: {
-    directory: 0,   # 本地目录
-    url: 1,        # 单个网页
-    sitemap: 2,    # 站点地图
-    note: 3
-  }
-
   # 验证
   validates :title, presence: true
   validates :source_type, presence: true

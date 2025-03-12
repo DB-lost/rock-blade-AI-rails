@@ -8,7 +8,7 @@ class KnowledgeEntriesController < ApplicationController
     if @knowledge_entry.save
       redirect_to @knowledge_base, notice: "知识条目添加成功。"
     else
-      render :new, status: :unprocessable_entity
+      render @knowledge_base, status: :unprocessable_entity
     end
   end
 

@@ -6,7 +6,7 @@
   </div>
 
   <%= render_form_for([@current_knowledge_base, KnowledgeEntry.new], class: "space-y-4") do |form| %>
-    <%= form.hidden_field :source_type, value: :url %>
+    <%= form.hidden_field :source_type, value: 1 %>
 
     <div class="grid grid-cols-3 items-baseline mb-4">
       <%= form.label :title, class: "text-right mr-4 text-lg" %>
