@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 
   # 知识库相关路由
   resources :knowledge_bases do
-    resources :knowledge_entries, only: [ :new, :create, :edit, :update, :destroy ] do
+    resources :knowledge_entries, only: [ :create, :update, :destroy ] do
       collection do
         post :upload_file
         post :add_url

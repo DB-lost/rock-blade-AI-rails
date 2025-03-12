@@ -12,32 +12,8 @@
                 <%= lucide_icon "file", class: "w-5 h-5 mr-2" %>
                 文件
               </h2>
-              <%= render_button variant: :outline, size: :sm, class: "flex items-center space-x-1" do %>
-                <%= lucide_icon "plus", class: "w-4 h-4" %>
-                <span>添加文件</span>
-              <% end %>
             </div>
-            <div class="p-6 text-center text-muted-foreground border-2 border-dashed border-border rounded-lg mx-4 mb-4" data-controller="file-upload">
-              <div data-file-upload-target="dropzone" class="cursor-pointer">
-                <%= render_form_with url: upload_file_knowledge_base_knowledge_entries_path(@current_knowledge_base), 
-                            method: :post, 
-                            multipart: true,
-                            data: { file_upload_target: "form" } do |form| %>
-                  <div class="mb-4">
-                    <%= lucide_icon "upload-cloud", class: "w-12 h-12 mx-auto text-muted-foreground" %>
-                  </div>
-                  <p class="mb-2 font-semibold">拖拽文件到这里或点击上传</p>
-                  <p class="text-sm text-muted-foreground mb-4">支持 TXT, MD, HTML, PDF, DOCX, PPTX, XLSX, EPUB... 格式</p>
-                  <%= form.file_field :file, 
-                                  direct_upload: true,
-                                  class: "hidden", 
-                                  data: { 
-                                    file_upload_target: "input",
-                                    action: "change->file-upload#handleFileSelect"
-                                  } %>
-                <% end %>
-              </div>
-            </div>
+            <%= render_dropzone %>
           </div>
 
           <!-- 目录区域 -->

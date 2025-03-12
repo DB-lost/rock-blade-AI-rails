@@ -1,16 +1,6 @@
 class KnowledgeEntriesController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_knowledge_base
-  before_action :set_knowledge_entry, only: [ :edit, :update, :destroy ]
-
-  # 面包屑设置
-  add_breadcrumb "首页", :root_path
-  add_breadcrumb "知识库", :knowledge_bases_path
-
-  def new
-    @knowledge_entry = @knowledge_base.knowledge_entries.new
-    @source_type = params[:source_type] || "file"
-  end
+  before_action :set_knowledge_entry, only: [ :update, :destroy ]
 
   def create
     @knowledge_entry = @knowledge_base.knowledge_entries.new(knowledge_entry_params)
@@ -20,9 +10,6 @@ class KnowledgeEntriesController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
-  end
-
-  def edit
   end
 
   def update
