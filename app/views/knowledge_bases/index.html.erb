@@ -133,15 +133,36 @@
                       <%= lucide_icon "file-text", class: "w-4 h-4 text-muted-foreground" %>
                       <div class="flex flex-col">
                         <span class="font-medium"><%= entry.title %></span>
-                        <span class="text-sm text-muted-foreground">
-                          <%= truncate(entry.content, length: 100) %>
-                        </span>
+                        <div class="text-sm text-muted-foreground">
+                          <% if markdown?(entry.content) %>
+                            <%= truncate(strip_tags(markdown(entry.content)), length: 100) %>
+                          <% else %>
+                            <%= truncate(entry.content, length: 100) %>
+                          <% end %>
+                        </div>
                       </div>
                     </div>
                     <div class="flex items-center space-x-2">
+                      <%= render_dialog do %>
+                        <%= dialog_trigger do %>
+                          <%= render_button variant: :ghost, size: :sm, class: "h-8 w-8 p-0", title: "预览笔记" do %>
+                            <%= lucide_icon "eye", class: "w-4 h-4" %>
+                          <% end %>
+                        <% end %>
+                        <%= dialog_content do %>
+                          <div class="prose prose-sm max-w-none pb-6">
+                            <h2 class="text-lg font-semibold mb-4"><%= entry.title %></h2>
+                            <% if markdown?(entry.content) %>
+                              <%= markdown(entry.content) %>
+                            <% else %>
+                              <p><%= entry.content %></p>
+                            <% end %>
+                          </div>
+                        <% end %>
+                      <% end %>
                       <%= button_to knowledge_base_knowledge_entry_path(@current_knowledge_base, entry),
                           method: :delete,
-                          class: "text-muted-foreground hover:text-destructive",
+                          class: "inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-destructive",
                           form: { data: { turbo_confirm: "确定要删除这个笔记吗？" } },
                           title: "删除笔记" do %>
                         <%= lucide_icon "trash", class: "w-4 h-4" %>

@@ -5,7 +5,9 @@
     <p class="text-sm text-muted-foreground">添加一个文本笔记作为知识源</p>
   </div>
 
-  <%= render_form_for([@current_knowledge_base, KnowledgeEntry.new], class: "space-y-4") do |form| %>
+  <%= render_form_for([@current_knowledge_base, KnowledgeEntry.new],
+    url: add_note_knowledge_base_knowledge_entries_path(@current_knowledge_base), 
+    class: "space-y-4") do |form| %>
     <%= form.hidden_field :source_type, value: "note" %>
 
     <div class="grid grid-cols-3 items-baseline mb-4">
@@ -25,10 +27,6 @@
     </div>
 
     <div class="flex justify-center pt-8">
-      <%= form.button "取消", 
-          type: "button",
-          class: "mr-2",
-          data: { action: "click->dialog#close" } %>
       <%= form.submit "添加", class: "ml-2" %>
     </div>
   <% end %>
