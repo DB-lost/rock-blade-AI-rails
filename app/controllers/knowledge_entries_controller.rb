@@ -1,6 +1,6 @@
 class KnowledgeEntriesController < ApplicationController
   before_action :set_knowledge_base
-  before_action :set_knowledge_entry, only: [ :update, :destroy ]
+  before_action :set_knowledge_entry, only: [ :destroy ]
 
   def create
     @knowledge_entry = @knowledge_base.knowledge_entries.new(knowledge_entry_params)
@@ -9,14 +9,6 @@ class KnowledgeEntriesController < ApplicationController
       redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "知识条目添加成功。"
     else
       render @knowledge_base, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    if @knowledge_entry.update(knowledge_entry_params)
-      redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "知识条目更新成功。"
-    else
-      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -67,10 +59,12 @@ class KnowledgeEntriesController < ApplicationController
       source_url: url_params[:source_url]
     )
 
-    if @knowledge_entry.save
+    respond_to do |format|
+      if @knowledge_entry.save
       redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "URL添加成功。"
-    else
+      else
       redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), alert: "URL添加失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
+      end
     end
   end
 

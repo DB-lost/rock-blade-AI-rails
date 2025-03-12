@@ -2,10 +2,12 @@
 <div class="p-6">
   <div class="mb-6">
     <h2 class="text-lg font-semibold">添加网址</h2>
-    <p class="text-sm text-muted-foreground">添加一个网页链接作为知识源</p>
+    <p class="text-sm text-muted-foreground">添加网页链接作为知识源</p>
   </div>
 
-  <%= render_form_for([@current_knowledge_base, KnowledgeEntry.new], class: "space-y-4") do |form| %>
+  <%= render_form_for([@current_knowledge_base, KnowledgeEntry.new],
+      url: add_url_knowledge_base_knowledge_entries_path(@current_knowledge_base), 
+      class: "space-y-4") do |form| %>
     <%= form.hidden_field :source_type, value: "url" %>
 
     <div class="grid grid-cols-3 items-baseline mb-4">
@@ -18,17 +20,13 @@
 
     <div class="grid grid-cols-3 items-baseline">
       <%= form.label :source_url, class: "text-right mr-4 text-lg" %>
-      <%= form.url_field :source_url,
+      <%= form.text_area :source_url, 
           required: true,
-          placeholder: "输入网页地址",
+          placeholder: "输入网址",
           class: "col-span-2" %>
     </div>
 
     <div class="flex justify-center pt-8">
-      <%= form.button "取消", 
-          type: "button",
-          class: "mr-2",
-          data: { action: "click->dialog#close" } %>
       <%= form.submit "添加", class: "ml-2" %>
     </div>
   <% end %>

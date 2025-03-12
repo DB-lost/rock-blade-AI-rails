@@ -53,53 +53,6 @@
             <% end %>
           </div>
 
-          <!-- 目录区域 -->
-          <div class="border border-border rounded-lg">
-            <div class="p-4 border-b border-border flex justify-between items-center">
-              <h2 class="font-semibold flex items-center">
-                <%= lucide_icon "folder", class: "w-5 h-5 mr-2" %>
-                目录
-              </h2>
-              <%= render_dialog do %>
-                <%= dialog_trigger do %>
-                  <%= render_button variant: :outline, size: :sm, class: "flex items-center space-x-1" do %>
-                    <%= lucide_icon "plus", class: "w-4 h-4" %>
-                    <span>添加目录</span>
-                  <% end %>
-                <% end %>
-                <%= dialog_content do %>
-                  <%= render "directory_form" %>
-                <% end %>
-              <% end %>
-            </div>
-            <!-- 目录列表 -->
-            <% if @directories.present? %>
-              <div class="divide-y divide-border">
-                <% @directories.each do |entry| %>
-                  <div class="flex items-center justify-between p-4 hover:bg-muted/50">
-                    <div class="flex items-center space-x-2">
-                      <%= lucide_icon "folder", class: "w-4 h-4 text-muted-foreground" %>
-                      <span class="font-medium"><%= entry.title %></span>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                      <%= button_to knowledge_base_knowledge_entry_path(@current_knowledge_base, entry),
-                          method: :delete,
-                          class: "text-muted-foreground hover:text-destructive",
-                          form: { data: { turbo_confirm: "确定要删除这个目录吗？" } },
-                          title: "删除目录" do %>
-                        <%= lucide_icon "trash", class: "w-4 h-4" %>
-                      <% end %>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            <% else %>
-              <div class="p-6 text-center text-muted-foreground">
-                还没有添加目录
-              </div>
-            <% end %>
-          </div>
-
           <!-- 网址区域 -->
           <div class="border border-border rounded-lg">
             <div class="p-4 border-b border-border flex justify-between items-center">
