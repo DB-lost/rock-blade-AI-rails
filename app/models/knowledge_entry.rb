@@ -18,6 +18,19 @@ class KnowledgeEntry < ApplicationRecord
   # 搜索
   scope :search, ->(query) { where("title ILIKE ? OR content ILIKE ?", "%#{query}%", "%#{query}%") if query.present? }
 
+  # 类型判断方法
+  def url?
+    source_type == "url"
+  end
+
+  def note?
+    source_type == "note"
+  end
+
+  def file?
+    source_type == "file"
+  end
+
   # 处理文件内容提取
   after_create :extract_content_from_file, if: -> { file? && file.attached? }
 

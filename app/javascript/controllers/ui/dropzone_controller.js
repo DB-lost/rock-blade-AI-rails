@@ -46,14 +46,25 @@ export default class extends Controller {
       method: "POST",
       body: formData,
       headers: {
-        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content
+        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Accept": "application/json"
       },
       credentials: 'same-origin'
     })
-      .then(response => response.json())
+      .then(response => {
+        if (response.redirected) {
+          window.location.href = response.url;
+          return null;
+        }
+        return response.json();
+      })
       .then(data => {
-        if (data.success && redirectUrl) {
-          window.location.href = redirectUrl;
+        if (data === null) return; // 重定向情况已处理
+        if (data.success) {
+          if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+            return;
+          }
         }
         // 触发自定义事件,让父组件可以处理上传完成后的行为
         const event = new CustomEvent('upload:complete', {

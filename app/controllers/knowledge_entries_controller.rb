@@ -6,7 +6,7 @@ class KnowledgeEntriesController < ApplicationController
     @knowledge_entry = @knowledge_base.knowledge_entries.new(knowledge_entry_params)
 
     if @knowledge_entry.save
-      redirect_to @knowledge_base, notice: "知识条目添加成功。"
+      redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "知识条目添加成功。"
     else
       render @knowledge_base, status: :unprocessable_entity
     end
@@ -14,7 +14,7 @@ class KnowledgeEntriesController < ApplicationController
 
   def update
     if @knowledge_entry.update(knowledge_entry_params)
-      redirect_to @knowledge_base, notice: "知识条目更新成功。"
+      redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "知识条目更新成功。"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -22,28 +22,40 @@ class KnowledgeEntriesController < ApplicationController
 
   def destroy
     @knowledge_entry.destroy
-    redirect_to @knowledge_base, notice: "知识条目已删除。"
+    redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "知识条目已删除。"
   end
 
   # 文件上传处理
   def upload_file
     @knowledge_entry = @knowledge_base.knowledge_entries.new(
       title: file_params[:file].original_filename,
-      source_type: :file
+      source_type: "file"
     )
     @knowledge_entry.file.attach(file_params[:file])
 
-    if @knowledge_entry.save
-      render json: {
-        success: true,
-        message: "文件上传成功",
-        redirect_url: knowledge_base_path(@knowledge_base)
-      }
-    else
-      render json: {
-        success: false,
-        message: "文件上传失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
-      }
+    respond_to do |format|
+      format.html do
+        if @knowledge_entry.save
+          redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "文件上传成功。"
+        else
+          redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), alert: "文件上传失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
+        end
+      end
+
+      format.json do
+        if @knowledge_entry.save
+          render json: {
+            success: true,
+            message: "文件上传成功",
+            redirect_url: knowledge_bases_path(kb_id: @knowledge_base.id)
+          }
+        else
+          render json: {
+            success: false,
+            message: "文件上传失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
+          }
+        end
+      end
     end
   end
 
@@ -51,14 +63,14 @@ class KnowledgeEntriesController < ApplicationController
   def add_url
     @knowledge_entry = @knowledge_base.knowledge_entries.new(
       title: url_params[:title],
-      source_type: :url,
+      source_type: "url",
       source_url: url_params[:source_url]
     )
 
     if @knowledge_entry.save
-      redirect_to @knowledge_base, notice: "URL添加成功。"
+      redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "URL添加成功。"
     else
-      redirect_to @knowledge_base, alert: "URL添加失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
+      redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), alert: "URL添加失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
     end
   end
 
@@ -66,14 +78,14 @@ class KnowledgeEntriesController < ApplicationController
   def add_note
     @knowledge_entry = @knowledge_base.knowledge_entries.new(
       title: note_params[:title],
-      source_type: :note,
+      source_type: "note",
       content: note_params[:content]
     )
 
     if @knowledge_entry.save
-      redirect_to @knowledge_base, notice: "笔记添加成功。"
+      redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), notice: "笔记添加成功。"
     else
-      redirect_to @knowledge_base, alert: "笔记添加失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
+      redirect_to knowledge_bases_path(kb_id: @knowledge_base.id), alert: "笔记添加失败：#{@knowledge_entry.errors.full_messages.join(', ')}"
     end
   end
 

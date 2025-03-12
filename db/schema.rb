@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_12_090929) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_12_092914) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -73,11 +73,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_12_090929) do
   create_table "knowledge_entries", force: :cascade do |t|
     t.string "title", null: false
     t.text "content"
-    t.integer "source_type", default: 0, null: false
     t.string "source_url"
     t.integer "knowledge_base_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "source_type", null: false
     t.index ["knowledge_base_id"], name: "index_knowledge_entries_on_knowledge_base_id"
     t.index ["source_type"], name: "index_knowledge_entries_on_source_type"
     t.index ["title"], name: "index_knowledge_entries_on_title"
