@@ -9,6 +9,11 @@ class KnowledgeBasesController < ApplicationController
     if params[:query].present?
       @knowledge_bases = @knowledge_bases.search(params[:query])
     end
+
+    # 设置当前选中的知识库
+    if params[:kb_id].present?
+      @current_knowledge_base = @knowledge_bases.find_by(id: params[:kb_id])
+    end
   end
 
   def show

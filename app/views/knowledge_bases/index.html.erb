@@ -79,7 +79,7 @@
                   <% end %>
                 <% end %>
                 <%= dialog_content do %>
-                  <%= render "url_form" %>
+                  
                 <% end %>
               <% end %>
             </div>
@@ -103,7 +103,7 @@
                   <% end %>
                 <% end %>
                 <%= dialog_content do %>
-                  <%= render "sitemap_form" %>
+                  
                 <% end %>
               <% end %>
             </div>
@@ -127,7 +127,7 @@
                   <% end %>
                 <% end %>
                 <%= dialog_content do %>
-                  <%= render "note_form" %>
+                  
                 <% end %>
               <% end %>
             </div>
@@ -163,14 +163,15 @@
              data-controller="knowledge-base-menu"
              data-action="contextmenu->knowledge-base-menu#showMenu click->knowledge-base-menu#handleClick"
              data-knowledge-base-menu-id-value="<%= knowledge_base.id %>"
-             data-knowledge-base-menu-active-value="<%= knowledge_base == @current_knowledge_base %>">
+             data-knowledge-base-menu-active-value="<%= knowledge_base == @current_knowledge_base %>"
+             data-turbo-permanent>
           <%= lucide_icon "book", class: "w-5 h-5" %>
           <h3 class="font-semibold truncate"><%= knowledge_base.name %></h3>
           
           <!-- 右键菜单 -->
           <div class="hidden fixed bg-background border border-border rounded-md shadow-md z-50 w-40 py-1"
                data-knowledge-base-menu-target="menu"
-               data-action="click->knowledge-base-menu#preventBubble">
+               data-action="click->knowledge-base-menu#preventBubble mousedown->knowledge-base-menu#preventBubble">
             <%= render_dialog do %>
               <%= dialog_trigger do %>
                 <button class="w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2">
@@ -210,4 +211,4 @@
       <% end %>
     </div>
   </div>
-</div> 
+</div>

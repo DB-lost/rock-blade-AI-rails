@@ -11,11 +11,11 @@
     </div>
   </div>
 
-  <div class="flex justify-end mt-6">
+  <div class="flex justify-center mt-6">
     <% if knowledge_base.persisted? %>
-      <%= form.submit "更新知识库", class: "bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90" %>
+      <%= form.submit "更新知识库", method: :patch, class: "mr-2" %>
     <% else %>
-      <%= form.submit "创建知识库", class: "bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90" %>
+      <%= form.submit "创建知识库", class: "mr-2" %>
     <% end %>
   </div>
 <% end %> 
