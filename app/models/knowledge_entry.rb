@@ -1,4 +1,8 @@
 class KnowledgeEntry < ApplicationRecord
+  vectorsearch
+
+  after_save :upsert_to_vectorsearch
+
   # 关联
   belongs_to :knowledge_base
 
@@ -33,12 +37,62 @@ class KnowledgeEntry < ApplicationRecord
 
   # 处理文件内容提取
   after_create :extract_content_from_file, if: -> { file? && file.attached? }
+  after_commit :update_vector_embeddings, if: :saved_change_to_content?
+
+  def process_for_embeddings
+    {
+      title: title,
+      content: content,
+      metadata: {
+        source_type: source_type,
+        knowledge_base_id: knowledge_base_id
+      }
+    }
+  end
 
   private
 
   def extract_content_from_file
-    # 这里将来实现文件内容提取逻辑
-    # 根据文件类型（PDF, DOCX, TXT等）提取文本内容
-    # 并存储到content字段中
+    return unless file.attached?
+
+    content = case file.content_type
+    when "text/markdown", "text/plain"
+               file.download
+    when "application/pdf"
+               extract_pdf_content
+    when %r{\Aimage/.*}
+               extract_image_content
+    else
+               Rails.logger.warn "Unsupported file type: #{file.content_type}"
+               nil
+    end
+
+    update(content: content) if content.present?
+  end
+
+  def extract_pdf_content
+    require "pdf-reader"
+
+    io = file.download
+    reader = PDF::Reader.new(io)
+    reader.pages.map(&:text).join("\n\n")
+  rescue => e
+    Rails.logger.error "Error extracting PDF content: #{e.message}"
+    nil
+  end
+
+  def extract_image_content
+    # 使用多邦AI进行图片描述
+    image_wrapper = Langchain::Utils::ImageWrapper.new(
+      Rails.application.routes.url_helpers.rails_blob_url(file, host: ENV["HOST"])
+    )
+
+    LLMService.create_llm.complete(
+      prompt: "请描述这张图片的内容：",
+      image: image_wrapper.base64
+    )
+  rescue => e
+    Rails.logger.error "Error extracting image content: #{e.message}"
+    nil
   end
 end

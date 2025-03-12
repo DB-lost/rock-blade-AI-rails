@@ -11,40 +11,29 @@ class KnowledgeBaseService
     end
   end
 
-  # 搜索知识库内容
+  # 使用向量搜索知识库内容
   def search(query, limit = 5)
     return [] if query.blank? || @selected_knowledge_bases.empty?
 
-    # 简单实现：基于关键词搜索
-    # 未来可以替换为向量搜索或其他语义搜索方法
     results = []
-
     @selected_knowledge_bases.each do |knowledge_base|
-      # 搜索知识条目
-      entries = knowledge_base.knowledge_entries
-                             .where("title ILIKE ? OR content ILIKE ?", "%#{query}%", "%#{query}%")
-                             .limit(limit)
+      # 对每个选中的知识库进行向量搜索
+      entries = VectorSearchService.search_in_knowledge_base(knowledge_base.id, query, limit: limit)
 
       entries.each do |entry|
         results << {
-          id: entry.id,
-          title: entry.title,
-          content: entry.content,
-          source_type: entry.source_type,
-          source_url: entry.source_url,
-          knowledge_base: knowledge_base.name
+          id: entry[:id],
+          title: entry[:title],
+          content: entry[:content],
+          source_type: entry[:source_type],
+          knowledge_base: knowledge_base.name,
+          score: entry[:score]
         }
       end
     end
 
-    # 按相关性排序（简单实现）
-    results.sort_by do |result|
-      # 标题匹配的优先级高于内容匹配
-      [
-        -(result[:title].downcase.include?(query.downcase) ? 1 : 0),
-        -(result[:content].to_s.downcase.include?(query.downcase) ? 1 : 0)
-      ]
-    end.first(limit)
+    # 按相似度分数排序并限制结果数量
+    results.sort_by { |result| -result[:score] }.first(limit)
   end
 
   # 获取知识库内容用于AI上下文

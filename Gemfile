@@ -77,6 +77,7 @@ gem "ruby-openai", "~> 7.4"
 gem "langchainrb_rails", git: "https://github.com/patterns-ai-core/langchainrb_rails.git"
 gem "langchainrb", "~> 0.19.4"
 gem "qdrant-ruby", "~> 0.9.8"
+gem "pdf-reader", "~> 2.12" # PDF 文本提取
 
 # Markdown
 gem "redcarpet", "~> 3.6.1"
