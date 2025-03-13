@@ -1,4 +1,4 @@
-<div data-controller="ui--checkbox">
+<div data-controller="ui--checkbox" <%= tag.attributes(local_assigns[:data] || {}) %>>
   <div class="flex items-center space-x-2">
     <button
       type="button"
@@ -8,7 +8,8 @@
       value="on"
       class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
       for="<%= name %>"
-      data-action="click->ui--checkbox#toggle"
+      data-action="click->ui--checkbox#toggle <%= local_assigns.dig(:button_data, :action) %>"
+      <%= tag.attributes(local_assigns[:button_data] || {}) %>
       id="<%= options[:id] %>">
       <span
         class="flex items-center justify-center text-current hidden"
@@ -28,6 +29,8 @@
         </svg>
       </span>
     </button>
-    <%= render_label name: name, label: label, data: {action: "click->ui--checkbox#toggle"} %>
+    <%= render_label name: name, 
+                    label: label, 
+                    data: local_assigns[:label_data]&.merge(action: "click->ui--checkbox#toggle") || {action: "click->ui--checkbox#toggle"} %>
   </div>
 </div>
