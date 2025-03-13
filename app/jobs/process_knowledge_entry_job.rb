@@ -109,9 +109,9 @@ class ProcessKnowledgeEntryJob < ApplicationJob
         sequence: index,
         metadata: {
           source_type: entry.source_type,
-          knowledge_base_id: entry.knowledge_base_id,
-          file_type: entry.file_type,
-          original_filename: entry.original_filename
+          knowledge_base_id: entry.knowledge_base_id
+          #file_type: entry.file_type,
+          #original_filename: entry.original_filename
         }
       )
     end
