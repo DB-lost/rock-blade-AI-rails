@@ -40,11 +40,10 @@ class AssistantToolsService
       end
     end
 
-    # TODO: 添加知识库工具
     def knowledge_tools(selected_tool_types)
       return [] unless selected_tool_types.include?("knowledge")
-      # 在这里添加知识库工具
-      []
+
+      [ Langchain::Tool::KnowledgeBase.new ]
     end
   end
 end
