@@ -3,6 +3,7 @@ class AiChatsController < ApplicationController
 
   def index
     @assistants = current_user.assistants
+    @knowledge_bases = current_user.knowledge_bases.order(:name)
 
     # 如果URL中有assistant_id参数，则使用该助手
     if params[:assistant_id].present?

@@ -73,16 +73,19 @@
                 </div>
               <% end %>
             <% end %>
-            <%= render_button variant: :ghost,
-                  class: "tool-button",
-                  data: {
-                    tools_target: "button",
-                    action: "click->tools#toggle",
-                    tool_type: "knowledge",
-                    state: "unselected"
-                  } do %>
-              <%= lucide_icon "book-open", class: "w-5 h-5" %>
-            <% end %>
+            <div class="relative">
+              <%= render_button variant: :ghost,
+                    class: "tool-button",
+                    data: {
+                      tools_target: "button",
+                      action: "click->tools#toggle",
+                      tool_type: "knowledge",
+                      state: "unselected"
+                    } do %>
+                <%= lucide_icon "book-open", class: "w-5 h-5" %>
+              <% end %>
+              <%= render "knowledge_base_list" %>
+            </div>
           </div>
           <div class="flex-1">
             <%= turbo_frame_tag "new_message_form" do %>
