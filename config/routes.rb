@@ -37,4 +37,18 @@ Rails.application.routes.draw do
     resources :conversations, only: [ :create, :update, :destroy ]
   end
   resources :messages, only: [ :create ]
+
+  # 知识库相关路由
+  resources :knowledge_bases, only: [ :index, :create, :update, :destroy ] do
+    collection do
+      get :list
+    end
+    resources :knowledge_entries, only: [ :create, :destroy ] do
+      collection do
+        post :upload_file
+        post :add_url
+        post :add_note
+      end
+    end
+  end
 end

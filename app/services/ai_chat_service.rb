@@ -8,7 +8,7 @@ class AiChatService
   end
 
   # 流式生成响应，用于实时更新
-  def generate_streaming_response(conversation_id, history, selected_tools)
+  def generate_streaming_response(conversation_id, history, selected_tools, selected_knowledge_bases = nil)
     begin
       # 创建一个空的助手回复消息
       message = Message.create!(
@@ -22,7 +22,8 @@ class AiChatService
         message.id,
         history,
         assistant.instructions,
-        selected_tools
+        selected_tools,
+        selected_knowledge_bases
       )
 
       # 返回初始消息对象，让控制器可以立即返回响应

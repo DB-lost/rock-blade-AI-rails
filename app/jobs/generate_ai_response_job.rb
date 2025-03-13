@@ -3,10 +3,11 @@
 class GenerateAiResponseJob < ApplicationJob
   queue_as :default
 
-  def perform(message_id, history, instructions, selected_tools = [])
+  def perform(message_id, history, instructions, selected_tools = [], selected_knowledge_bases = "[]")
     @message = Message.find(message_id)
     @tool_usages = {}  # 存储工具使用记录的引用
     @selected_tools = selected_tools  # 存储选中的工具
+    @selected_knowledge_bases = JSON.parse(selected_knowledge_bases) rescue []  # 存储选中的知识库
 
     # 初始化消息内容，避免显示上一次的回答
     @message.update!(content: "正在思考...")
@@ -200,7 +201,23 @@ class GenerateAiResponseJob < ApplicationJob
 
   def get_selected_tools
     selected_tool_types = AssistantToolsService.parse_tool_types(@selected_tools)
-    AssistantToolsService.register_tools(selected_tool_types)
+
+    # 如果有选中的知识库，添加知识库工具类型
+    selected_tool_types << "knowledge" if @selected_knowledge_bases.present?
+
+    tools = AssistantToolsService.register_tools(selected_tool_types)
+
+    # 为知识库工具设置上下文
+    if @selected_knowledge_bases.present?
+      knowledge_bases = KnowledgeBase.where(id: @selected_knowledge_bases)
+      tools.each do |tool|
+        if tool.is_a?(Langchain::Tool::KnowledgeBase)
+          tool.setup_context(knowledge_bases)
+        end
+      end
+    end
+
+    tools
   end
 
   def handle_error(e)

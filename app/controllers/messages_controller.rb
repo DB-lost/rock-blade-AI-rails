@@ -24,7 +24,13 @@ class MessagesController < ApplicationController
       # 使用流式响应生成AI回复
       ai_service = AiChatService.new(@conversation.assistant)
       selected_tools = params.dig(:message, :selected_tools)
-      ai_service.generate_streaming_response(@conversation.id, history, selected_tools)
+      selected_knowledge_bases = params.dig(:message, :selected_knowledge_bases)
+      ai_service.generate_streaming_response(
+        @conversation.id,
+        history,
+        selected_tools,
+        selected_knowledge_bases
+      )
 
       respond_to do |format|
         format.turbo_stream { head :ok }
@@ -40,6 +46,6 @@ class MessagesController < ApplicationController
   private
 
   def message_params
-    params.require(:message).permit(:content, :conversation_id, :selected_tools)
+    params.require(:message).permit(:content, :conversation_id, :selected_tools, :selected_knowledge_bases)
   end
 end

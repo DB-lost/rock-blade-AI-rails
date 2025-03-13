@@ -76,6 +76,16 @@
   <div class="p-2">
     <div data-sidebar-target="collapsible" class="text-sm font-medium text-muted-foreground px-2 py-1.5">Projects</div>
     
+    <%= link_to root_path, class: "flex items-center space-x-3 px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
+      <div class="w-8 h-8 bg-foreground rounded-lg flex items-center justify-center flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-background" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <span data-sidebar-target="collapsible" class="transition-opacity duration-300 overflow-hidden whitespace-nowrap">Home</span>
+    <% end %>
+
     <%= link_to ai_chats_path, class: "flex items-center space-x-3 px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
       <div class="w-8 h-8 bg-foreground rounded-lg flex items-center justify-center flex-shrink-0">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-background" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -84,6 +94,16 @@
         </svg>
       </div>
       <span data-sidebar-target="collapsible" class="transition-opacity duration-300 overflow-hidden whitespace-nowrap">AI Chat</span>
+    <% end %>
+
+    <%= link_to knowledge_bases_path, class: "flex items-center space-x-3 px-2 py-1.5 text-sm hover:bg-accent rounded-md" do %>
+      <div class="w-8 h-8 bg-foreground rounded-lg flex items-center justify-center flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-background" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+      </div>
+      <span data-sidebar-target="collapsible" class="transition-opacity duration-300 overflow-hidden whitespace-nowrap">Knowledge Base</span>
     <% end %>
   </div>
 

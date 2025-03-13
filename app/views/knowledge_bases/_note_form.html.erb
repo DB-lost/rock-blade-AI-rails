@@ -1,0 +1,33 @@
+<!-- 笔记表单 -->
+<div class="p-6">
+  <div class="mb-6">
+    <h2 class="text-lg font-semibold">添加笔记</h2>
+    <p class="text-sm text-muted-foreground">添加一个文本笔记作为知识源</p>
+  </div>
+
+  <%= render_form_for([@current_knowledge_base, KnowledgeEntry.new],
+    url: add_note_knowledge_base_knowledge_entries_path(@current_knowledge_base), 
+    class: "space-y-4") do |form| %>
+    <%= form.hidden_field :source_type, value: "note" %>
+
+    <div class="grid grid-cols-3 items-baseline mb-4">
+      <%= form.label :title, class: "text-right mr-4 text-lg" %>
+      <%= form.text_field :title, 
+          required: true,
+          placeholder: "输入笔记标题",
+          class: "col-span-2" %>
+    </div>
+
+    <div class="grid grid-cols-3 items-baseline">
+      <%= form.label :content, class: "text-right mr-4 text-lg" %>
+      <%= form.text_area :content,
+          required: true,
+          placeholder: "输入笔记内容（支持 Markdown 格式）",
+          class: "col-span-2 h-40" %>
+    </div>
+
+    <div class="flex justify-center pt-8">
+      <%= form.submit "添加", class: "ml-2" %>
+    </div>
+  <% end %>
+</div>

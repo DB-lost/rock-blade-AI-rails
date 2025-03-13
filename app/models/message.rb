@@ -13,7 +13,7 @@ class Message < ActiveRecord::Base
   after_create_commit -> { broadcast_create }
   after_update_commit -> { broadcast_replace }
 
-  attr_accessor :selected_tools
+  attr_accessor :selected_tools, :selected_knowledge_bases
 
   def system?
     role == "system"

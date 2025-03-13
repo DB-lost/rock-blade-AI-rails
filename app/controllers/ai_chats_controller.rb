@@ -3,6 +3,7 @@ class AiChatsController < ApplicationController
 
   def index
     @assistants = current_user.assistants
+    @knowledge_bases = current_user.knowledge_bases.order(:name)
 
     # 如果URL中有assistant_id参数，则使用该助手
     if params[:assistant_id].present?
@@ -12,9 +13,12 @@ class AiChatsController < ApplicationController
       @current_assistant = current_user.last_used_assistant
     end
 
+    # 设置会话列表，如果没有助手则为空数组
+    @conversations = @current_assistant&.conversations&.order(updated_at: :desc) || []
+
     if params[:conversation_id].present?
-      @current_conversation = @current_assistant.conversations.find_by(id: params[:conversation_id])
-      @current_conversation.touch if @current_conversation
+      @current_conversation = @current_assistant&.conversations&.find_by(id: params[:conversation_id])
+      @current_conversation&.touch if @current_conversation
     else
       if @current_assistant.present?
         conversation = @current_assistant.conversations.ordered.first
@@ -28,13 +32,11 @@ class AiChatsController < ApplicationController
         @current_conversation = conversation
       end
     end
-    @conversations = @current_assistant.conversations.order(updated_at: :desc)
   end
 
   private
 
   def set_chat_breadcrumbs
-    set_default_breadcrumb
     add_breadcrumb "AI Chats", ai_chats_path
   end
 end

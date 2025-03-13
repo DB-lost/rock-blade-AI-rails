@@ -29,20 +29,55 @@ export default class extends Controller {
     });
   }
 
-  // Implement your own file upload strategy here...
   uploadFile(file) {
-    console.log("Received file for upload: ", file);
-    console.log("Implement your own file upload strategy here...");
-    //   const formData = new FormData();
-    //   formData.append("file", file);
+    const uploadUrl = this.element.dataset.uploadUrl;
+    const fileParamName = this.element.dataset.fileParamName || "file";
+    const redirectUrl = this.element.dataset.redirectUrl;
 
-    //   fetch("/upload", {
-    //     method: "POST",
-    //     body: formData,
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       console.log(data);
-    //     });
+    if (!uploadUrl) {
+      console.error("No upload URL provided");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append(fileParamName, file);
+
+    fetch(uploadUrl, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content,
+        "Accept": "application/json"
+      },
+      credentials: 'same-origin'
+    })
+      .then(response => {
+        if (response.redirected) {
+          window.location.href = response.url;
+          return null;
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data === null) return; // 重定向情况已处理
+        if (data.success) {
+          if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+            return;
+          }
+        }
+        // 触发自定义事件,让父组件可以处理上传完成后的行为
+        const event = new CustomEvent('upload:complete', {
+          detail: { response: data }
+        });
+        this.element.dispatchEvent(event);
+      })
+      .catch(error => {
+        console.error('Upload failed:', error);
+        const event = new CustomEvent('upload:error', {
+          detail: { error }
+        });
+        this.element.dispatchEvent(event);
+      });
   }
 }

@@ -1,0 +1,256 @@
+<div class="h-full flex bg-background">
+  <!-- 左侧内容区域 -->
+  <div class="flex-1 flex flex-col">
+    <% if @current_knowledge_base %>
+      <!-- 知识库内容区域 -->
+      <div class="flex-1 overflow-y-auto">
+        <div class="p-6 space-y-6">
+          <!-- 文件上传区域 -->
+          <div class="border border-border rounded-lg">
+            <div class="p-4 border-b border-border flex justify-between items-center">
+              <h2 class="font-semibold flex items-center">
+                <%= lucide_icon "file", class: "w-5 h-5 mr-2" %>
+                文件
+              </h2>
+            </div>
+            <%= render_dropzone(
+              upload_url: upload_file_knowledge_base_knowledge_entries_path(@current_knowledge_base),
+              file_param_name: "knowledge_entry[file]",
+              redirect_url: knowledge_bases_path(kb_id: @current_knowledge_base.id)
+            ) %>
+            
+            <!-- 文件列表 -->
+            <% if @files.present? %>
+              <div class="divide-y divide-border">
+                <% @files.each do |entry| %>
+                  <div class="flex items-center justify-between p-4 hover:bg-muted/50">
+                    <div class="flex items-center space-x-2">
+                      <%= lucide_icon "file", class: "w-4 h-4 text-muted-foreground" %>
+                      <span class="font-medium"><%= entry.title %></span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <%= link_to rails_blob_path(entry.file, disposition: "attachment"), 
+                          class: "inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-foreground",
+                          title: "下载文件" do %>
+                        <%= lucide_icon "download", class: "w-4 h-4" %>
+                      <% end %>
+                      <%= button_to knowledge_base_knowledge_entry_path(@current_knowledge_base, entry),
+                          method: :delete,
+                          class: "inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-destructive",
+                          form: { class: "inline-flex" },
+                          form: { data: { turbo_confirm: "确定要删除这个文件吗？" } },
+                          title: "删除文件" do %>
+                        <%= lucide_icon "trash", class: "w-4 h-4" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="p-6 text-center text-muted-foreground">
+                还没有上传文件
+              </div>
+            <% end %>
+          </div>
+
+          <!-- 网址区域 -->
+          <div class="border border-border rounded-lg">
+            <div class="p-4 border-b border-border flex justify-between items-center">
+              <h2 class="font-semibold flex items-center">
+                <%= lucide_icon "link", class: "w-5 h-5 mr-2" %>
+                网址
+              </h2>
+              <%= render_dialog do %>
+                <%= dialog_trigger do %>
+                  <%= render_button variant: :outline, size: :sm, class: "flex items-center space-x-1" do %>
+                    <%= lucide_icon "plus", class: "w-4 h-4" %>
+                    <span>添加网址</span>
+                  <% end %>
+                <% end %>
+                <%= dialog_content do %>
+                  <%= render "url_form" %>
+                <% end %>
+              <% end %>
+            </div>
+            <!-- URL列表 -->
+            <% if @urls.present? %>
+              <div class="divide-y divide-border">
+                <% @urls.each do |entry| %>
+                  <div class="flex items-center justify-between p-4 hover:bg-muted/50">
+                    <div class="flex items-center space-x-2">
+                      <%= lucide_icon "link", class: "w-4 h-4 text-muted-foreground" %>
+                      <div class="flex flex-col">
+                        <span class="font-medium"><%= entry.title %></span>
+                        <a href="<%= entry.source_url %>" target="_blank" class="text-sm text-muted-foreground hover:text-foreground">
+                          <%= entry.source_url %>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <%= button_to knowledge_base_knowledge_entry_path(@current_knowledge_base, entry),
+                          method: :delete,
+                          class: "text-muted-foreground hover:text-destructive",
+                          form: { data: { turbo_confirm: "确定要删除这个网址吗？" } },
+                          title: "删除网址" do %>
+                        <%= lucide_icon "trash", class: "w-4 h-4" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="p-6 text-center text-muted-foreground">
+                还没有添加网址
+              </div>
+            <% end %>
+          </div>
+
+          <!-- 笔记区域 -->
+          <div class="border border-border rounded-lg">
+            <div class="p-4 border-b border-border flex justify-between items-center">
+              <h2 class="font-semibold flex items-center">
+                <%= lucide_icon "file-text", class: "w-5 h-5 mr-2" %>
+                笔记
+              </h2>
+              <%= render_dialog do %>
+                <%= dialog_trigger do %>
+                  <%= render_button variant: :outline, size: :sm, class: "flex items-center space-x-1" do %>
+                    <%= lucide_icon "plus", class: "w-4 h-4" %>
+                    <span>添加笔记</span>
+                  <% end %>
+                <% end %>
+                <%= dialog_content do %>
+                  <%= render "note_form" %>
+                <% end %>
+              <% end %>
+            </div>
+            <!-- 笔记列表 -->
+            <% if @notes.present? %>
+              <div class="divide-y divide-border">
+                <% @notes.each do |entry| %>
+                  <div class="flex items-center justify-between p-4 hover:bg-muted/50">
+                    <div class="flex items-center space-x-2">
+                      <%= lucide_icon "file-text", class: "w-4 h-4 text-muted-foreground" %>
+                      <div class="flex flex-col">
+                        <span class="font-medium"><%= entry.title %></span>
+                        <div class="text-sm text-muted-foreground">
+                          <% if markdown?(entry.content) %>
+                            <%= truncate(strip_tags(markdown(entry.content)), length: 100) %>
+                          <% else %>
+                            <%= truncate(entry.content, length: 100) %>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <%= render_dialog do %>
+                        <%= dialog_trigger do %>
+                          <%= render_button variant: :ghost, size: :sm, class: "h-8 w-8 p-0", title: "预览笔记" do %>
+                            <%= lucide_icon "eye", class: "w-4 h-4" %>
+                          <% end %>
+                        <% end %>
+                        <%= dialog_content do %>
+                          <div class="prose prose-sm max-w-none pb-6">
+                            <h2 class="text-lg font-semibold mb-4"><%= entry.title %></h2>
+                            <% if markdown?(entry.content) %>
+                              <%= markdown(entry.content) %>
+                            <% else %>
+                              <p><%= entry.content %></p>
+                            <% end %>
+                          </div>
+                        <% end %>
+                      <% end %>
+                      <%= button_to knowledge_base_knowledge_entry_path(@current_knowledge_base, entry),
+                          method: :delete,
+                          class: "inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-destructive",
+                          form: { data: { turbo_confirm: "确定要删除这个笔记吗？" } },
+                          title: "删除笔记" do %>
+                        <%= lucide_icon "trash", class: "w-4 h-4" %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="p-6 text-center text-muted-foreground">
+                还没有添加笔记
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <!-- 空状态提示 -->
+      <div class="flex flex-col items-center justify-center h-full text-center p-6">
+        <div class="mb-6">
+          <%= lucide_icon "book", class: "w-16 h-16 text-muted-foreground" %>
+        </div>
+        <h2 class="text-xl font-bold mb-2">选择或创建知识库</h2>
+        <p class="text-muted-foreground mb-6">从右侧选择一个知识库，或创建新的知识库</p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 右侧知识库列表 -->
+  <div class="w-64 bg-muted/50 border-l border-border flex flex-col flex-shrink-0">
+    <!-- 知识库列表头部 -->
+    <div class="p-4 border-b border-border">
+      <h1 class="text-lg font-semibold">知识库</h1>
+    </div>
+
+    <!-- 知识库列表 -->
+    <div class="flex-1 p-4 space-y-2 overflow-y-auto">
+      <% @knowledge_bases.each do |knowledge_base| %>
+        <div class="p-2 hover:bg-muted rounded cursor-pointer flex items-center space-x-2 relative group border-2 <%= knowledge_base == @current_knowledge_base ? 'border-primary bg-muted' : 'border-transparent' %>"
+             data-controller="knowledge-base-menu"
+             data-action="contextmenu->knowledge-base-menu#showMenu click->knowledge-base-menu#handleClick"
+             data-knowledge-base-menu-id-value="<%= knowledge_base.id %>"
+             data-knowledge-base-menu-active-value="<%= knowledge_base == @current_knowledge_base %>"
+             data-turbo-permanent>
+          <%= lucide_icon "book", class: "w-5 h-5" %>
+          <h3 class="font-semibold truncate"><%= knowledge_base.name %></h3>
+          
+          <!-- 右键菜单 -->
+          <div class="hidden fixed bg-background border border-border rounded-md shadow-md z-50 w-40 py-1"
+               data-knowledge-base-menu-target="menu"
+               data-action="click->knowledge-base-menu#preventBubble mousedown->knowledge-base-menu#preventBubble">
+            <%= render_dialog do %>
+              <%= dialog_trigger do %>
+                <button class="w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2">
+                  <%= lucide_icon "edit-3", class: "w-4 h-4" %>
+                  <span>编辑知识库</span>
+                </button>
+              <% end %>
+              <%= dialog_content do %>
+                <%= render "form", knowledge_base: knowledge_base %>
+              <% end %>
+            <% end %>
+            <hr class="my-1 border-border">
+            <%= button_to knowledge_base_path(knowledge_base), 
+                        method: :delete, 
+                        form: { data: { turbo_confirm: "确定要删除这个知识库吗？" } },
+                        class: "w-full text-left px-4 py-2 hover:bg-muted flex items-center space-x-2 text-destructive" do %>
+              <%= lucide_icon "trash", class: "w-4 h-4" %>
+              <span>删除知识库</span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 底部添加按钮 -->
+    <div class="p-4 border-t border-border">
+      <%= render_dialog do %>
+        <%= dialog_trigger do %>
+          <%= render_button class: "w-full flex items-center justify-center space-x-2 p-2 bg-primary text-primary-foreground rounded hover:bg-primary/90" do %>
+            <%= lucide_icon "plus", class: "w-4 h-4" %>
+            <span>添加知识库</span>
+          <% end %>
+        <% end %>
+        <%= dialog_content do %>
+          <%= render "form", knowledge_base: KnowledgeBase.new %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

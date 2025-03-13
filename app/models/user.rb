@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :assistants, dependent: :destroy
   has_many :conversations, dependent: :destroy
   belongs_to :last_used_assistant, class_name: "Assistant", optional: true
+  has_many :knowledge_bases, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   normalizes :phone, with: ->(p) { p&.gsub(/\D/, "") }

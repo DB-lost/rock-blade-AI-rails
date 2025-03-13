@@ -1,0 +1,27 @@
+<div data-tools-target="knowledgeList" class="hidden absolute bottom-full mb-2 right-[-240px] z-50">
+  <div class="w-[320px] rounded-md border bg-background shadow-lg p-4">
+    <div class="space-y-2">
+      <h4 class="font-medium leading-none">选择知识库</h4>
+      <p class="text-sm text-muted-foreground">选择要使用的知识库</p>
+    </div>
+    <div class="mt-4 space-y-2">
+      <% if @knowledge_bases.any? %>
+        <% @knowledge_bases.each do |kb| %>
+          <div class="flex items-center space-x-2" data-controller="tools--knowledge-base" data-kb-id="<%= kb.id %>" data-action="ui--checkbox:toggled->tools--knowledge-base#toggleKnowledgeBase">
+            <%= render_checkbox(
+                label: kb.name,
+                name: "kb_#{kb.id}",
+                button_data: { 
+                  tools__knowledge_base_target: "checkbox"
+                }
+              ) %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="text-center text-sm text-muted-foreground py-2">
+          暂无知识库
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -73,27 +73,19 @@
                 </div>
               <% end %>
             <% end %>
-            <%= render_tooltip do %>
-              <%= tooltip_trigger do %>
-                <%= render_button variant: :ghost,
-                      class: "tool-button",
-                      data: {
-                        tools_target: "button",
-                        action: "click->tools#toggle",
-                        tool_type: "knowledge",
-                        state: "unselected"
-                      } do %>
-                  <%= lucide_icon "book-open", class: "w-5 h-5" %>
-                <% end %>
+            <div class="relative">
+              <%= render_button variant: :ghost,
+                    class: "tool-button",
+                    data: {
+                      tools_target: "button",
+                      action: "click->tools#toggle",
+                      tool_type: "knowledge",
+                      state: "unselected"
+                    } do %>
+                <%= lucide_icon "book-open", class: "w-5 h-5" %>
               <% end %>
-              <%= tooltip_content class: "bg-background border border-border shadow-md" do %>
-                <div class="grid gap-2">
-                  <div class="space-y-2">
-                    <p class="text-sm text-muted-foreground">知识库</p>
-                  </div>
-                </div>
-              <% end %>
-            <% end %>
+              <%= render "knowledge_base_list" %>
+            </div>
           </div>
           <div class="flex-1">
             <%= turbo_frame_tag "new_message_form" do %>
@@ -103,6 +95,7 @@
                 <% end %>
                 <%= form.hidden_field :conversation_id, value: @current_conversation&.id %>
                 <%= form.hidden_field :selected_tools, data: { tools_target: "selectedTools" } %>
+                <%= form.hidden_field :selected_knowledge_bases, value: "[]", data: { tools_target: "selectedKnowledgeBases" } %>
                 <div class="relative">
                   <!-- 文本区域 -->
                   <div class="resize-upward w-full">

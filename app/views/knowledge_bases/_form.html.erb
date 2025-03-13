@@ -1,0 +1,21 @@
+<%= render_form_for(knowledge_base, class: "w-full pt-4 pr-8") do |form| %>
+  <div class="space-y-4">
+    <div>
+      <%= form.label :name, class: "block text-sm font-medium mb-1" %>
+      <%= form.text_field :name, required: true, class: "w-full" %>
+    </div>
+    
+    <div>
+      <%= form.label :description, class: "block text-sm font-medium mb-1" %>
+      <%= form.text_area :description, rows: 4, class: "w-full" %>
+    </div>
+  </div>
+
+  <div class="flex justify-center mt-6">
+    <% if knowledge_base.persisted? %>
+      <%= form.submit "更新知识库", method: :patch, class: "mr-2" %>
+    <% else %>
+      <%= form.submit "创建知识库", class: "mr-2" %>
+    <% end %>
+  </div>
+<% end %> 

@@ -6,12 +6,22 @@ export default class extends Controller {
   }
 
   toggle() {
+    let isChecked = false;
     if (this.checkmark.classList.contains("hidden")) {
       this.checkmark.classList.remove("hidden");
       this.button.dataset.state = "checked";
+      isChecked = true;
     } else {
       this.checkmark.classList.add("hidden");
       this.button.dataset.state = "unchecked";
+      isChecked = false;
     }
+    
+    // 触发自定义事件，供其他控制器监听
+    const event = new CustomEvent("ui--checkbox:toggled", {
+      bubbles: true,
+      detail: { checked: isChecked }
+    });
+    this.element.dispatchEvent(event);
   }
 }
