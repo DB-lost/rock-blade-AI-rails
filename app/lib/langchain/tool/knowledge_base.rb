@@ -33,17 +33,19 @@ module Langchain::Tool
     # @return [Langchain::Tool::Response] 搜索结果响应
     def search(query:, limit: 3)
       return tool_response(content: "未选择知识库或参数不正确") if @knowledge_bases.blank? || query.blank?
-
       results = []
       @knowledge_bases.each do |kb|
-        matches = kb.knowledge_entries.flat_map do |entry|
-          entry.content_chunks.similarity_search(query).take(limit)
+        begin
+          matches = kb.knowledge_entries.flat_map do |entry|
+            entry.content_chunks.similarity_search(query, k: limit)
+          end
+          next if matches.empty?
+          results << "来自知识库 #{kb.name}:\n#{format_matches(matches)}"
+        rescue => e
+          Rails.logger.error("知识库搜索错误: #{e.message}")
+          Rails.logger.error(e.backtrace.join("\n"))
         end
-        next if matches.empty?
-
-        results << "来自知识库 #{kb.name}:\n#{format_matches(matches)}"
       end
-
       content = results.any? ? results.join("\n\n") : "未找到相关内容"
       tool_response(content: content)
     end
