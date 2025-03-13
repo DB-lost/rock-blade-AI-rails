@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_13_002954) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_13_150300) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -89,17 +89,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_13_002954) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "source_type", null: false
+    t.string "status", default: "pending"
+    t.datetime "processed_at"
+    t.json "metadata", default: {}
     t.index ["knowledge_base_id"], name: "index_knowledge_entries_on_knowledge_base_id"
     t.index ["source_type"], name: "index_knowledge_entries_on_source_type"
     t.index ["title"], name: "index_knowledge_entries_on_title"
   end
 
   create_table "messages", force: :cascade do |t|
+    t.integer "conversation_id"
     t.string "role"
     t.text "content"
     t.json "tool_calls"
     t.string "tool_call_id"
-    t.integer "conversation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
@@ -138,9 +141,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_13_002954) do
     t.string "phone"
     t.boolean "gender"
     t.date "birthday"
+    t.integer "last_used_assistant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "last_used_assistant_id"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["last_used_assistant_id"], name: "index_users_on_last_used_assistant_id"
     t.index ["phone"], name: "index_users_on_phone", unique: true
