@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 class ContentChunk < ApplicationRecord
   vectorsearch
 
   after_save :upsert_to_vectorsearch
+  after_destroy :destroy_from_vectorsearch
 
   # 关联
   belongs_to :knowledge_entry
@@ -14,13 +17,8 @@ class ContentChunk < ApplicationRecord
   # 排序
   scope :ordered, -> { order(sequence: :asc) }
 
-  def process_for_embeddings
-    {
-      content: content,
-      metadata: metadata.merge(
-        entry_id: knowledge_entry_id,
-        sequence: sequence
-      )
-    }
+  # 定义如何序列化为向量
+  def as_vector
+    content
   end
 end

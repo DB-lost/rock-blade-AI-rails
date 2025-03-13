@@ -1,8 +1,4 @@
 class KnowledgeEntry < ApplicationRecord
-  vectorsearch
-
-  after_save :upsert_to_vectorsearch
-
   # 关联
   belongs_to :knowledge_base
 
