@@ -64,7 +64,7 @@ group :test do
 end
 
 # Tailwind CSS is a utility-first CSS framework for rapidly building custom designs [https://tailwindcss.com]
-gem "tailwindcss-rails", "~> 3.0"
+gem "tailwindcss-rails", "~> 4.2"
 
 # Shadcn UI is a UI component library for Rails [
 gem "shadcn-ui", "~> 0.0.15"
