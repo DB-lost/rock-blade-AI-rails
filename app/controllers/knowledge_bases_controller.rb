@@ -2,6 +2,11 @@ class KnowledgeBasesController < ApplicationController
   before_action :set_chat_breadcrumbs
   before_action :set_knowledge_base, only: [ :update, :destroy ]
 
+  def list
+    @knowledge_bases = current_user.knowledge_bases.order(created_at: :desc)
+    render partial: "knowledge_bases/knowledge_base_list"
+  end
+
   def index
     @knowledge_bases = current_user.knowledge_bases.order(created_at: :desc)
 
