@@ -25,8 +25,8 @@ module Langchain
       }.freeze
 
       EMBEDDING_SIZES = {
-        "doubao-pro-256k" => 2560,
-        "doubao-embeddings" => 2560
+        "doubao-pro-256k" => 4096,
+        "doubao-embeddings" => 4096
       }.freeze
 
       def initialize(api_key:, llm_options: {}, default_options: {})
