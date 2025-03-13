@@ -9,10 +9,4 @@ LangchainrbRails.configure do |config|
     llm: LLMService.create_llm,
     index_name: "rock_blade_ai_rails"
   )
-
-  config.configure_model ContentChunk do |model|
-    model.embedding_field = :content
-    model.searchable_attributes = [ :content ]
-    model.collection_name = "content_chunks"
-  end
 end

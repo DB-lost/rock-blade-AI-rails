@@ -1,7 +1,7 @@
-# frozen_string_literal: true
-
 class ContentChunk < ApplicationRecord
-  include LangchainrbRails::Vectorizable
+  vectorsearch
+
+  after_save :upsert_to_vectorsearch
 
   # 关联
   belongs_to :knowledge_entry

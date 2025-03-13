@@ -1,5 +1,7 @@
 class KnowledgeEntry < ApplicationRecord
-  include LangchainrbRails::Vectorizable
+  vectorsearch
+
+  after_save :upsert_to_vectorsearch
 
   # 关联
   belongs_to :knowledge_base
