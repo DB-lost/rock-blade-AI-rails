@@ -44,7 +44,7 @@ module LangchainrbRails
 
       module ClassMethods
         # 覆盖 similarity_search，让其支持基于 user_id 的简单过滤
-        def similarity_search(query, k: 1, user_id: nil)
+        def similarity_search(query, k: 3, user_id: nil, min_score: nil, return_scores: false)
           search_params = {}
 
           # 如果传入了 user_id，就把它加入 Qdrant 的 filter
@@ -68,34 +68,82 @@ module LangchainrbRails
                         class_variable_get(:@@provider).similarity_search(
                           query: query,
                           k: k,
-                          filter: filter
+                          filter: filter,
+                          with_score: true # 始终请求分数
                         )
-                      else
+            else
                         class_variable_get(:@@provider).similarity_search(
                           query: query,
-                          k: k
+                          k: k,
+                          with_score: true # 始终请求分数
                         )
-                      end
+            end
           else
             # 对于其他向量搜索引擎，使用哈希参数调用
             search_params[:query] = query
             search_params[:k] = k
             search_params[:filter] = filter if filter
+            search_params[:with_score] = true # 始终请求分数
             records = class_variable_get(:@@provider).similarity_search(search_params)
+          end
+
+          # 应用相似度阈值过滤
+          if min_score && records.first.is_a?(Hash) && records.first.key?("score")
+            records = records.select { |r| r["score"] >= min_score }
           end
 
           # 如果使用 Pgvector，则直接返回 records
           return records if LangchainrbRails.config.vectorsearch.is_a?(Langchain::Vectorsearch::Pgvector)
 
-          # 如果是 Qdrant，解析出记录 id，然后返回 AR 对象
+          # 处理结果
           if LangchainrbRails.config.vectorsearch.is_a?(Langchain::Vectorsearch::Qdrant)
-            ids = records.map { |record| record.dig("payload", "id") || record.dig("id") }
-            return where(id: ids)
-          end
+            # 提取ID和分数
+            record_data = records.map do |record|
+              id = record.dig("payload", "id") || record.dig("id")
+              score = record["score"]
+              { id: id, score: score }
+            end
 
-          # 原有 Weaviate 逻辑
-          ids = records.map { |record| record.try("id") || record.dig("__id") }
-          where(id: ids)
+            # 查询数据库记录
+            ids = record_data.map { |data| data[:id] }
+            db_records = where(id: ids)
+
+            # 如果需要返回分数，将分数附加到记录上
+            if return_scores
+              # 创建ID到分数的映射
+              id_to_score = record_data.each_with_object({}) { |data, hash| hash[data[:id]] = data[:score] }
+
+              # 为每个记录添加score方法
+              db_records.each do |record|
+                score = id_to_score[record.id.to_s]
+                record.define_singleton_method(:score) { score }
+              end
+            end
+
+            db_records
+          else
+            # 原有 Weaviate 逻辑
+            record_data = records.map do |record|
+              id = record.try("id") || record.dig("__id")
+              score = record["score"] if record.is_a?(Hash) && record.key?("score")
+              { id: id, score: score }
+            end
+
+            ids = record_data.map { |data| data[:id] }
+            db_records = where(id: ids)
+
+            # 如果需要返回分数，将分数附加到记录上
+            if return_scores && record_data.first[:score]
+              id_to_score = record_data.each_with_object({}) { |data, hash| hash[data[:id]] = data[:score] }
+
+              db_records.each do |record|
+                score = id_to_score[record.id.to_s]
+                record.define_singleton_method(:score) { score }
+              end
+            end
+
+            db_records
+          end
         end
       end
     end
