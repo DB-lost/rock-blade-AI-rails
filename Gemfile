@@ -84,3 +84,5 @@ gem "redcarpet", "~> 3.6.1"
 
 # Calculator
 gem "eqn", "~> 1.6"
+
+gem "pg", "~> 1.5"

@@ -230,6 +230,7 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
+    pg (1.5.9)
     polyglot (0.3.5)
     pp (0.6.2)
       prettyprint
@@ -437,6 +438,7 @@ DEPENDENCIES
   langchainrb_rails!
   lucide-rails (~> 0.5.1)
   pdf-reader (~> 2.12)
+  pg (~> 1.5)
   propshaft
   puma (>= 5.0)
   qdrant-ruby (~> 0.9.8)
