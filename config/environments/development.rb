@@ -2,7 +2,12 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-
+  config.hosts = [
+    "127.0.0.1",             # 允许
+    "localhost",             # 允许 localhost
+    "rails.rockblade.cn",     # 允许 rails.rockblade.cn
+    /.*\.rockblade\.cn/      # 允许所有 rockblade.cn 的子域名
+  ]
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true
 

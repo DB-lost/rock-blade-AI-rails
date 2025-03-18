@@ -1,6 +1,4 @@
-# syntax=docker/dockerfile:1
-# check=error=true
-
+# 使用本地Dockerfile语法，不依赖外部语法定义
 # This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
 # docker build -t rock_blade_rails .
 # docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name rock_blade_rails rock_blade_rails
@@ -9,7 +7,7 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=3.4.2
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+FROM ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
 WORKDIR /rails

@@ -4,8 +4,18 @@ class ApplicationController < ActionController::Base
   include ErrorHandling
 
   helper_method :breadcrumbs, :add_breadcrumb
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  # 对移动端采用宽松要求，桌面端保持现代特性要求
+  allow_browser versions: {
+    # 移动端浏览器
+    ios: 12,          # iOS Safari 12+
+    android: 81,      # Android Chrome 81+
+    samsung: 12,      # Samsung Internet 12+
+
+    # 桌面端浏览器
+    chrome: :modern,
+    firefox: :modern,
+    safari: :modern
+  }
 
   private
 

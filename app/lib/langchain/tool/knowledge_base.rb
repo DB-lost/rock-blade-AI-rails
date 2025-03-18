@@ -89,8 +89,7 @@ module Langchain::Tool
         entry.content_chunks.similarity_search(
           query,
           k: limit,
-          min_score: min_score,
-          return_scores: true # 返回相似度分数
+          min_score: min_score
         )
       end
     end

@@ -68,14 +68,12 @@ module LangchainrbRails
                         class_variable_get(:@@provider).similarity_search(
                           query: query,
                           k: k,
-                          filter: filter,
-                          with_score: true # 始终请求分数
+                          filter: filter
                         )
             else
                         class_variable_get(:@@provider).similarity_search(
                           query: query,
-                          k: k,
-                          with_score: true # 始终请求分数
+                          k: k
                         )
             end
           else
@@ -83,7 +81,6 @@ module LangchainrbRails
             search_params[:query] = query
             search_params[:k] = k
             search_params[:filter] = filter if filter
-            search_params[:with_score] = true # 始终请求分数
             records = class_variable_get(:@@provider).similarity_search(search_params)
           end
 
